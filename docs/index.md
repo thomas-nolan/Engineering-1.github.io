@@ -13,7 +13,7 @@ In addition we have also provided the game files for you to play.
 - Implementation document (enter file here)
 
 ## Executable code 
-- download game.jar (enter file here)
+- Download game.jar (enter file here)
 
 ## Source files for the game
 - Github repository (enter link here)
