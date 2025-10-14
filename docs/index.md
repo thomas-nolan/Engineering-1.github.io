@@ -20,4 +20,7 @@ In addition we have also provided the game files for you to play.
 
 --------------------------------------------------------
 ## Current plan 
+![Gantt Chart](images/gantt-chart.md)
+
+
 
