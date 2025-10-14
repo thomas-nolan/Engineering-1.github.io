@@ -17,3 +17,7 @@ In addition we have also provided the game files for you to play.
 
 ## Source files for the game
 - Github repository (enter link here)
+
+--------------------------------------------------------
+## Current plan 
+
