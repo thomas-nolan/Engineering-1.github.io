@@ -10,19 +10,20 @@ import com.badlogic.gdx.math.Vector2;
 public class Player {
     private Sprite sprite;
     private Vector2 position;
-    private float playerSpeed = 10f;
-    private float timer = 90f;
+    private float playerSpeed = 10f; // Add modifier
 
+    // PLayer constructor
     public Player(Texture playerTexture, float startXPosition, float startYPosition) {
         sprite = new Sprite(playerTexture);
         position = new Vector2(startXPosition, startYPosition);
         sprite.setPosition(position.x, position.y);
-        sprite.setSize(1, 1);
+        sprite.setSize(20, 20);
     }
 
+    // Movement and timer
     public void update() {
         float delta = Gdx.graphics.getDeltaTime();
-        // Movement controls
+        // Movement controls for arrow keys and WASD
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
             position.x += playerSpeed * delta;
         }
@@ -36,10 +37,10 @@ public class Player {
             position.y -= playerSpeed * delta;
         }
 
-        timer -= delta;
         sprite.setPosition(position.x, position.y);
     }
 
+    // Generates the player character on the game scene
     public void draw(SpriteBatch batch) {
         sprite.draw(batch);
     }

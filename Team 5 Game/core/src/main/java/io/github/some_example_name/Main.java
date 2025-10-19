@@ -3,9 +3,11 @@ package io.github.some_example_name;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 //import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -13,7 +15,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main implements ApplicationListener {
@@ -25,6 +31,15 @@ public class Main implements ApplicationListener {
     Player player;
     FitViewport viewport;
     TiledMap map;
+    OrthogonalTiledMapRenderer mapRenderer;
+
+    // UI
+    Stage stage;
+    Skin skin;
+    Label label;
+
+    // Timer
+    double timer = 10f;
 
     @Override
     public void create() {
@@ -38,8 +53,20 @@ public class Main implements ApplicationListener {
         spriteBatch = new SpriteBatch();
         font = new BitmapFont();
         //font.getData().setScale(0.05f);
-        viewport = new FitViewport(8, 5);
-        player = new Player(playerTexture, 5, 5);
+        viewport = new FitViewport(1920, 1080);
+        player = new Player(playerTexture, 1, 100);
+
+        stage = new Stage(new ScreenViewport());
+        font = new BitmapFont();
+        Gdx.input.setInputProcessor(stage);
+        skin = new Skin(Gdx.files.internal("uiskin.json"));
+        Label.LabelStyle style = new Label.LabelStyle(font, Color.RED);
+        label = new Label(Double.toString(timer) , style);
+        label.setPosition(500,1000);
+        stage.addActor(label);
+
+        map = new TmxMapLoader().load("ENG_START_MAP.tmx");
+        mapRenderer = new OrthogonalTiledMapRenderer(map);
 
     }
 
@@ -56,15 +83,13 @@ public class Main implements ApplicationListener {
     @Override
     public void render() {
         // organize code into three methods
-        resizeText();
         input();
         logic();
         draw();
+        updateTimer();
     }
 
-    public void resizeText() {
 
-    }
 
     private void input() {
         player.update();
@@ -82,16 +107,22 @@ public class Main implements ApplicationListener {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         viewport.apply();
+        // Draw mao
+        mapRenderer.setView((OrthographicCamera) viewport.getCamera());
+        mapRenderer.render();
         spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
         spriteBatch.begin();
         float worldWidth = viewport.getWorldWidth();
         float worldHeight = viewport.getWorldHeight();
 
-        spriteBatch.draw(backgroundTexture, 0, 0, worldWidth, worldHeight);
+        //spriteBatch.draw(backgroundTexture, 0, 0, worldWidth, worldHeight);
         //font.draw(spriteBatch, "Hello", 1, 1);
         player.draw(spriteBatch);
 
         spriteBatch.end();
+
+        stage.act(Gdx.graphics.getDeltaTime());
+        stage.draw();
     }
 
     @Override
@@ -104,8 +135,16 @@ public class Main implements ApplicationListener {
         // Invoked when your application is resumed after pause.
     }
 
+    public void updateTimer() {
+        timer -= Gdx.graphics.getDeltaTime();
+
+        label.setText(Double.toString(timer));
+    }
+
     @Override
     public void dispose() {
         // Destroy application's resources here.
+        stage.dispose();
+        skin.dispose();
     }
 }
