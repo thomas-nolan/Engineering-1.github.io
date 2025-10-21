@@ -21,6 +21,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main implements ApplicationListener {
     Texture backgroundTexture;
@@ -40,6 +44,10 @@ public class Main implements ApplicationListener {
 
     // Timer
     double timer = 10f;
+    
+    // Doors
+    private Texture doorTexture;
+    private List<Door> doors = new ArrayList<Door>();
 
     @Override
     public void create() {
@@ -67,6 +75,10 @@ public class Main implements ApplicationListener {
 
         map = new TmxMapLoader().load("ENG_START_MAP.tmx");
         mapRenderer = new OrthogonalTiledMapRenderer(map);
+        
+        // create door texture and new door. add to list of doors
+        doorTexture = new Texture("door.jpg");
+        doors.add(new Door(50, 150, 20, 20, doorTexture));
 
     }
 
@@ -89,10 +101,8 @@ public class Main implements ApplicationListener {
         updateTimer();
     }
 
-
-
     private void input() {
-        player.update();
+        player.update(doors);
     }
 
     private void logic() {
@@ -101,6 +111,15 @@ public class Main implements ApplicationListener {
         float worldHeight = viewport.getWorldHeight();
 
         player.clamp(worldWidth, worldHeight);
+        
+        // check for door collision
+        // complete this when key item is implemented
+        for (Door door : doors) {
+            if (door.collides(player.getCollision())) {
+            	// if player collides with door
+            	// check if has item key, if yes unlock door
+            }
+        }
     }
 
     private void draw() {
@@ -119,10 +138,15 @@ public class Main implements ApplicationListener {
         //font.draw(spriteBatch, "Hello", 1, 1);
         player.draw(spriteBatch);
 
-        spriteBatch.end();
-
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+        
+        // draw doors
+        for (Door door : doors) {
+        	door.draw(spriteBatch);
+        }
+        
+        spriteBatch.end();
     }
 
     @Override
