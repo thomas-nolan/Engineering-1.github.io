@@ -12,7 +12,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -32,6 +34,7 @@ public class Main implements ApplicationListener {
     FitViewport viewport;
     TiledMap map;
     OrthogonalTiledMapRenderer mapRenderer;
+    TiledMapTileLayer nonWalkable;
 
     // UI
     Stage stage;
@@ -39,7 +42,7 @@ public class Main implements ApplicationListener {
     Label label;
 
     // Timer
-    double timer = 10f;
+    float timer = 10f;
 
     @Override
     public void create() {
@@ -47,6 +50,7 @@ public class Main implements ApplicationListener {
         backgroundTexture = new Texture("background.png"); //Background is a placeholder
         playerTexture = new Texture("bucket.png"); //bucket is a placeholder
         map = new TmxMapLoader().load("ENG_START_MAP.tmx");
+        nonWalkable = (TiledMapTileLayer) map.getLayers().get("non-walkable objects");
 
         //dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.mp3"));
         //music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
@@ -54,15 +58,15 @@ public class Main implements ApplicationListener {
         font = new BitmapFont();
         //font.getData().setScale(0.05f);
         viewport = new FitViewport(1920, 1080);
-        player = new Player(playerTexture, 1, 100);
+        player = new Player(playerTexture, 15, 90, nonWalkable);
 
         stage = new Stage(new ScreenViewport());
         font = new BitmapFont();
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         Label.LabelStyle style = new Label.LabelStyle(font, Color.RED);
-        label = new Label(Double.toString(timer) , style);
-        label.setPosition(500,1000);
+        label = new Label(Float.toString(timer) , style);
+        label.setPosition(950,1000);
         stage.addActor(label);
 
         map = new TmxMapLoader().load("ENG_START_MAP.tmx");
@@ -120,9 +124,11 @@ public class Main implements ApplicationListener {
         player.draw(spriteBatch);
 
         spriteBatch.end();
-
+        // Draw map
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+
+
     }
 
     @Override
@@ -136,9 +142,11 @@ public class Main implements ApplicationListener {
     }
 
     public void updateTimer() {
-        timer -= Gdx.graphics.getDeltaTime();
-
-        label.setText(Double.toString(timer));
+        if (timer >= 0) {
+            timer -= Gdx.graphics.getDeltaTime();
+            int intTimer = (int) timer; // Removes decimals when displaying the timer
+            label.setText(Integer.toString(intTimer));
+        }
     }
 
     @Override
