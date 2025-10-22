@@ -15,14 +15,18 @@ public class Player {
     private float speedModifier = 1.5f;
     private float playerSpeed = 20f * speedModifier; // Add modifier
     TiledMapTileLayer nonWalkable;
+    TiledMapTileLayer walls;
+    TiledMapTileLayer corners;
 
     // PLayer constructor
-    public Player(Texture playerTexture, float startXPosition, float startYPosition, TiledMapTileLayer nonWalkableLayer) {
+    public Player(Texture playerTexture, float startXPosition, float startYPosition, TiledMapTileLayer nonWalkableLayer, TiledMapTileLayer wallLayer, TiledMapTileLayer cornerLayer) {
         sprite = new Sprite(playerTexture);
         position = new Vector2(startXPosition, startYPosition);
         sprite.setPosition(position.x, position.y);
         sprite.setSize(20, 20);
         this.nonWalkable = nonWalkableLayer;
+        this.walls = wallLayer;
+        this.corners = cornerLayer;
     }
 
     // Movement and timer
@@ -59,8 +63,11 @@ public class Player {
         int tileXPosition = (int) (xPosition / nonWalkable.getTileWidth());
         int tileYPosition = (int) (yPosition / nonWalkable.getTileHeight());
 
-        TiledMapTileLayer.Cell cell = nonWalkable.getCell(tileXPosition, tileYPosition);
-        if (cell != null && cell.getTile() != null) {
+        TiledMapTileLayer.Cell cell1 = nonWalkable.getCell(tileXPosition, tileYPosition);
+        TiledMapTileLayer.Cell cell2 = walls.getCell(tileXPosition, tileYPosition);
+        boolean isNonWalkable = cell1 != null && cell1.getTile() != null;
+        boolean isWall = cell2 != null && cell2.getTile() != null;
+        if (isNonWalkable || isWall) {
             return false;
         }
         else {

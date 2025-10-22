@@ -35,6 +35,8 @@ public class Main implements ApplicationListener {
     TiledMap map;
     OrthogonalTiledMapRenderer mapRenderer;
     TiledMapTileLayer nonWalkable;
+    TiledMapTileLayer walls;
+    TiledMapTileLayer corners;
 
     // UI
     Stage stage;
@@ -51,6 +53,9 @@ public class Main implements ApplicationListener {
         playerTexture = new Texture("bucket.png"); //bucket is a placeholder
         map = new TmxMapLoader().load("ENG_START_MAP.tmx");
         nonWalkable = (TiledMapTileLayer) map.getLayers().get("non-walkable objects");
+        walls = (TiledMapTileLayer) map.getLayers().get("Bording");
+        corners = (TiledMapTileLayer) map.getLayers().get("Corners");
+
 
         //dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.mp3"));
         //music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
@@ -58,7 +63,7 @@ public class Main implements ApplicationListener {
         font = new BitmapFont();
         //font.getData().setScale(0.05f);
         viewport = new FitViewport(1920, 1080);
-        player = new Player(playerTexture, 15, 90, nonWalkable);
+        player = new Player(playerTexture, 200, 160, nonWalkable, walls, corners);
 
         stage = new Stage(new ScreenViewport());
         font = new BitmapFont();
