@@ -1,62 +1,86 @@
 package io.github.some_example_name;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+
+import java.util.List;
 
 public class Player {
     private Sprite sprite;
     private Vector2 position;
     private float speedModifier = 1.5f;
-    private float playerSpeed = 20f * speedModifier; // Add modifier
+    private float playerSpeed = 20f * speedModifier;
+    private Rectangle playerCollision;
+
     TiledMapTileLayer nonWalkable;
     TiledMapTileLayer walls;
     TiledMapTileLayer corners;
 
-    // PLayer constructor
-    public Player(Texture playerTexture, float startXPosition, float startYPosition, TiledMapTileLayer nonWalkableLayer, TiledMapTileLayer wallLayer, TiledMapTileLayer cornerLayer) {
+    // Player constructor
+    public Player(Texture playerTexture, float startXPosition, float startYPosition,
+                  TiledMapTileLayer nonWalkableLayer, TiledMapTileLayer wallLayer, TiledMapTileLayer cornerLayer) {
         sprite = new Sprite(playerTexture);
         position = new Vector2(startXPosition, startYPosition);
         sprite.setPosition(position.x, position.y);
         sprite.setSize(20, 20);
+
         this.nonWalkable = nonWalkableLayer;
         this.walls = wallLayer;
         this.corners = cornerLayer;
+
+        playerCollision = new Rectangle(position.x, position.y, sprite.getWidth(), sprite.getHeight());
     }
 
-    // Movement and timer
-    public void update() {
+    // Movement and collision
+    public void update(List<Door> doors) {
         float delta = Gdx.graphics.getDeltaTime();
-        float newXPosition = position.x;
-        float newYPosition = position.y;
-        // Movement controls for arrow keys and WASD
+
+        float moveX = 0;
+        float moveY = 0;
+
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
-            newXPosition += playerSpeed * delta;
+        	moveX += playerSpeed * delta;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
-            newXPosition -= playerSpeed * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)  || Gdx.input.isKeyPressed(Input.Keys.A)) {
+        	moveX -= playerSpeed * delta;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W)) {
-            newYPosition += playerSpeed * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)    || Gdx.input.isKeyPressed(Input.Keys.W)) {
+        	moveY += playerSpeed * delta;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S)) {
-            newYPosition -= playerSpeed * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)  || Gdx.input.isKeyPressed(Input.Keys.S)) {
+        	moveY -= playerSpeed * delta;
         }
 
-        // Checks the new position is not a non-walkable surface (Wall, Table etc.)
-        if (isWalkable(newXPosition, position.y)) {
-            position.x = newXPosition;
+        float newXPosition = position.x + moveX;
+        float newYPosition = position.y + moveY;
+
+        // door collision
+        boolean blocked = false;
+        Rectangle nextPosition = new Rectangle(playerCollision);
+        nextPosition.x = newXPosition;
+        nextPosition.y = newYPosition;
+
+        for (Door door : doors) {
+            if (door.isLocked() && door.collides(nextPosition)) {
+                blocked = true;
+                break;
+            }
         }
-        if (isWalkable(position.x, newYPosition)) {
-            position.y = newYPosition;
+
+        if (!blocked) {
+            if (isWalkable(newXPosition, position.y)) position.x = newXPosition;
+            if (isWalkable(position.x, newYPosition)) position.y = newYPosition;
         }
 
         sprite.setPosition(position.x, position.y);
+        playerCollision.setPosition(position.x, position.y);
     }
 
     public boolean isWalkable(float xPosition, float yPosition) {
@@ -68,18 +92,17 @@ public class Player {
         boolean isNonWalkable = cell1 != null && cell1.getTile() != null;
         boolean isWall = cell2 != null && cell2.getTile() != null;
         if (isNonWalkable || isWall) {
-            return false;
+        	return false;
         }
         else {
-            return true;
+        	return true;
         }
     }
 
-    // Generates the player character on the game scene
     public void draw(SpriteBatch batch) {
         sprite.draw(batch);
     }
-    // Keeps the player character within the map
+
     public void clamp(float worldWidth, float worldHeight) {
         float width = sprite.getWidth();
         float height = sprite.getHeight();
@@ -88,9 +111,18 @@ public class Player {
         float clampY = MathUtils.clamp(sprite.getY(), 0, worldHeight - height);
 
         sprite.setPosition(clampX, clampY);
+        playerCollision.setPosition(clampX, clampY);
+    }
+
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    public Rectangle getCollision() {
+        return playerCollision;
     }
 
     public void dispose() {
-        // Dispose here
+        // Dispose if needed
     }
 }
