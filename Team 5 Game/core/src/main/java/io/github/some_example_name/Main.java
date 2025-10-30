@@ -40,6 +40,7 @@ public class Main implements ApplicationListener {
     Stage stage;
     Skin skin;
     Label label;
+    Label scoreLabel;
 
     // Timer
     double timer = 10.0;
@@ -71,6 +72,10 @@ public class Main implements ApplicationListener {
         label = new Label(Double.toString(timer), style);
         label.setPosition(950, 1000);
         stage.addActor(label);
+
+        scoreLabel = new Label("Score: " + Float.toString(player.score), style);
+        scoreLabel.setPosition(1500,1000);
+        stage.addActor(scoreLabel);
 
         mapRenderer = new OrthogonalTiledMapRenderer(map);
 
