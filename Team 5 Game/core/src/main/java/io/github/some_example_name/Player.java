@@ -19,6 +19,8 @@ public class Player {
     private float playerSpeed = 20f * speedModifier;
     private Rectangle playerCollision;
 
+    float score;
+
     TiledMapTileLayer nonWalkable;
     TiledMapTileLayer walls;
     TiledMapTileLayer corners;
@@ -30,6 +32,8 @@ public class Player {
         position = new Vector2(startXPosition, startYPosition);
         sprite.setPosition(position.x, position.y);
         sprite.setSize(20, 20);
+
+        score = 0f;
 
         this.nonWalkable = nonWalkableLayer;
         this.walls = wallLayer;
