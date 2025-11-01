@@ -12,8 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Player {
     private Sprite sprite;
     private Vector2 position;
-    private float speedModifier = 1.5f;
-    private float playerSpeed = 20f * speedModifier; // Add modifier
+    private float playerSpeed = 30f;
     TiledMapTileLayer nonWalkable;
     TiledMapTileLayer walls;
     TiledMapTileLayer corners;
@@ -92,5 +91,17 @@ public class Player {
 
     public void dispose() {
         // Dispose here
+    }
+
+    public Vector2 getPosition() {
+        return this.position;
+    }
+
+    public float getPlayerSpeed() {
+        return this.playerSpeed;
+    }
+
+    public void setPlayerSpeed(float newSpeed) {
+        this.playerSpeed = newSpeed;
     }
 }
