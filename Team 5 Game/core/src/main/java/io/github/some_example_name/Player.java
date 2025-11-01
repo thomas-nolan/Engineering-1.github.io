@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.List;
 
@@ -16,22 +17,22 @@ public class Player {
     private Sprite sprite;
     private Vector2 position;
     private float speedModifier = 1.5f;
-    private float playerSpeed = 20f * speedModifier;
+    private float playerSpeed = 40f * speedModifier;
     private Rectangle playerCollision;
 
-    TiledMapTileLayer nonWalkable;
+    Array<TiledMapTileLayer> nonWalkable;
     TiledMapTileLayer walls;
     TiledMapTileLayer corners;
 
     // Player constructor
     public Player(Texture playerTexture, float startXPosition, float startYPosition,
-                  TiledMapTileLayer nonWalkableLayer, TiledMapTileLayer wallLayer, TiledMapTileLayer cornerLayer) {
+                  Array<TiledMapTileLayer> nonWalkableLayers, TiledMapTileLayer wallLayer, TiledMapTileLayer cornerLayer) {
         sprite = new Sprite(playerTexture);
         position = new Vector2(startXPosition, startYPosition);
         sprite.setPosition(position.x, position.y);
         sprite.setSize(20, 20);
 
-        this.nonWalkable = nonWalkableLayer;
+        this.nonWalkable = nonWalkableLayers;
         this.walls = wallLayer;
         this.corners = cornerLayer;
 
@@ -84,19 +85,20 @@ public class Player {
     }
 
     public boolean isWalkable(float xPosition, float yPosition) {
-        int tileXPosition = (int) (xPosition / nonWalkable.getTileWidth());
-        int tileYPosition = (int) (yPosition / nonWalkable.getTileHeight());
 
-        TiledMapTileLayer.Cell cell1 = nonWalkable.getCell(tileXPosition, tileYPosition);
-        TiledMapTileLayer.Cell cell2 = walls.getCell(tileXPosition, tileYPosition);
-        boolean isNonWalkable = cell1 != null && cell1.getTile() != null;
-        boolean isWall = cell2 != null && cell2.getTile() != null;
-        if (isNonWalkable || isWall) {
-        	return false;
+        for (TiledMapTileLayer layer : nonWalkable) {
+            int tileXPosition = (int) (xPosition / layer.getTileWidth());
+            int tileYPosition = (int) (yPosition / layer.getTileHeight());
+    
+            TiledMapTileLayer.Cell cell1 = layer.getCell(tileXPosition, tileYPosition);
+            TiledMapTileLayer.Cell cell2 = walls.getCell(tileXPosition, tileYPosition);
+            boolean isNonWalkable = cell1 != null && cell1.getTile() != null;
+            boolean isWall = cell2 != null && cell2.getTile() != null;
+            if (isNonWalkable || isWall) {
+                return false;
+            }
         }
-        else {
-        	return true;
-        }
+        return true;
     }
 
     public void draw(SpriteBatch batch) {
