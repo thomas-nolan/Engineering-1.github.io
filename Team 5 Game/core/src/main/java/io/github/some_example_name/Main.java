@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class Main implements ApplicationListener {
     FitViewport viewport;
     TiledMap map;
     OrthogonalTiledMapRenderer mapRenderer;
-    TiledMapTileLayer nonWalkable;
+    Array<TiledMapTileLayer> nonWalkableLayers;
     TiledMapTileLayer walls;
     TiledMapTileLayer corners;
 
@@ -52,17 +53,24 @@ public class Main implements ApplicationListener {
     public void create() {
         backgroundTexture = new Texture("background.png");
         playerTexture = new Texture("bucket.png");
-        map = new TmxMapLoader().load("ENG_START_MAP.tmx");
+        map = new TmxMapLoader().load("./maps/ENG.tmx");
 
-        nonWalkable = (TiledMapTileLayer) map.getLayers().get("non-walkable objects");
-        walls = (TiledMapTileLayer) map.getLayers().get("Bording");
+        nonWalkableLayers = new Array<>();
+        nonWalkableLayers.add((TiledMapTileLayer) map.getLayers().get("Non-walkable Objects"));
+        nonWalkableLayers.add((TiledMapTileLayer) map.getLayers().get("Non-walkable Objects 2"));
+        nonWalkableLayers.add((TiledMapTileLayer) map.getLayers().get("Fence"));
+        nonWalkableLayers.add((TiledMapTileLayer) map.getLayers().get("Trees"));
+
+
+
+        walls = (TiledMapTileLayer) map.getLayers().get("Edges");
         corners = (TiledMapTileLayer) map.getLayers().get("Corners");
 
         spriteBatch = new SpriteBatch();
         font = new BitmapFont();
         viewport = new FitViewport(1920, 1080);
 
-        player = new Player(playerTexture, 200, 160, nonWalkable, walls, corners);
+        player = new Player(playerTexture, 775, 50, nonWalkableLayers, walls, corners);
 
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
