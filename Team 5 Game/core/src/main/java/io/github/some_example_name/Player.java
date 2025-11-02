@@ -14,8 +14,8 @@ import com.badlogic.gdx.utils.Array;
 import java.util.List;
 
 public class Player {
-    private Sprite sprite;
-    private Vector2 position;
+    protected Sprite sprite;
+    protected Vector2 position;
     private float speedModifier = 1.5f;
     private float playerSpeed = 40f * speedModifier;
     private Rectangle playerCollision;
