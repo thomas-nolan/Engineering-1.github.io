@@ -74,7 +74,7 @@ public class EndGameScreen implements Screen{
             @Override
             //ignore the argument - used for specific click / place clicked
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MainMenuScreen(game)); // have a look for how mainMenue is called
+                // game.setScreen(new MainMenuScreen(game)); // have a look for how mainMenue is called
             }
         });
         stage.addActor(menuButton);
