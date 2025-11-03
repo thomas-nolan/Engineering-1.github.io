@@ -84,4 +84,3 @@ Below are the key versions of our project plan, showing how our Gantt chart deve
 - Added **review and documentation** tasks near the end.  
 - Represents a **realistic and adaptive final plan**, balancing scope and deadlines.
 
----
