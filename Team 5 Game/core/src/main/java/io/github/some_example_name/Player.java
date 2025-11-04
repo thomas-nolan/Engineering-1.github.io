@@ -116,15 +116,23 @@ public class Player {
         playerCollision.setPosition(clampX, clampY);
     }
 
-    public Vector2 getPosition() {
-        return position;
-    }
-
     public Rectangle getCollision() {
         return playerCollision;
     }
 
     public void dispose() {
         // Dispose if needed
+    }
+
+    public Vector2 getPosition() {
+        return this.position;
+    }
+
+    public float getPlayerSpeed() {
+        return this.playerSpeed;
+    }
+
+    public void setPlayerSpeed(float newSpeed) {
+        this.playerSpeed = newSpeed;
     }
 }
