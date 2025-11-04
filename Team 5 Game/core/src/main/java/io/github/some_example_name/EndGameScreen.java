@@ -37,7 +37,7 @@ public class EndGameScreen implements Screen{
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         BitmapFont font = new BitmapFont();
         //Find a background texture to use and add it to assests
-        backgroundTexture = new Texture (Gdx.files.internal("endgame_background.png")); 
+        backgroundTexture = new Texture (Gdx.files.internal("background.png")); 
         Image background = new Image(backgroundTexture);
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         background.setPosition(0, 0);
@@ -62,6 +62,7 @@ public class EndGameScreen implements Screen{
             Gdx.graphics.getWidth() / 2f - scoreLabel.getWidth() / 2f, 
             Gdx.graphics.getHeight() - 300
             );
+        stage.addActor(scoreLabel);
         
         //button for main menu
         menuButton = new TextButton("Back to main menu", skin);
@@ -74,6 +75,8 @@ public class EndGameScreen implements Screen{
             @Override
             //ignore the argument - used for specific click / place clicked
             public void clicked(InputEvent event, float x, float y) {
+            	// dispose()
+            	// game.resetGame() // maybe implement a reset
                 // game.setScreen(new MainMenuScreen(game)); // have a look for how mainMenue is called
             }
         });

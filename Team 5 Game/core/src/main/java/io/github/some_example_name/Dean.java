@@ -12,10 +12,10 @@ import com.badlogic.gdx.utils.Array;
 
 
 public class Dean extends Player{
-    private float deanSpeed = 15f;
-    TiledMapTileLayer nonWalkable;
-    TiledMapTileLayer walls;
-    TiledMapTileLayer corners;
+    private float deanSpeed = 40f;
+    //TiledMapTileLayer nonWalkable;
+    //TiledMapTileLayer walls;
+    //TiledMapTileLayer corners;
     private Vector2 targetPosition;
     private float tolerance = 2f;
     private float roomX, roomY, roomWidth, roomHeight;
@@ -24,13 +24,13 @@ public class Dean extends Player{
 
     public Dean(Texture deanTexture, float startXPosition, float startYPosition, 
                 Array<TiledMapTileLayer> nonWalkableLayer, TiledMapTileLayer wallLayer, 
-                TiledMapTileLayer cornerLayer, float roomX, float roomY, float roomWidth, float roomHeight) {
-        super(deanTexture, startXPosition, startYPosition, nonWalkableLayer, wallLayer, cornerLayer);
+                TiledMapTileLayer cornerLayer, float roomX, float roomY, float roomWidth, float roomHeight, int sizeX, int sizeY) {
+        super(deanTexture, startXPosition, startYPosition, nonWalkableLayer, wallLayer, cornerLayer, sizeX, sizeY);
         this.roomX = roomX;
         this.roomY = roomY;
         this.roomWidth = roomWidth;
         this.roomHeight = roomHeight;
-        deanRect = new Rectangle(startXPosition, startYPosition, 20, 20);
+        deanRect = new Rectangle(startXPosition, startYPosition, sizeX, sizeY);
 
         targetPosition = new Vector2(
             roomX + (float)Math.random() * roomWidth,

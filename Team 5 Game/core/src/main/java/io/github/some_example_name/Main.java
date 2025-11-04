@@ -1,6 +1,7 @@
 package io.github.some_example_name;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 //import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class Main implements ApplicationListener {
+public class Main extends Game {
     Texture backgroundTexture;
     Texture playerTexture;
     Texture speedBoostTexture;
@@ -67,6 +68,10 @@ public class Main implements ApplicationListener {
     private Texture keyTexture;
     private Key key;
     private boolean hasKey = false;
+    
+    // Dean
+    private Texture deanTexture;
+    private Dean dean;
 
     @Override
     public void create() {
@@ -89,8 +94,12 @@ public class Main implements ApplicationListener {
         spriteBatch = new SpriteBatch();
         viewport = new FitViewport(1920, 1080);
 
-        player = new Player(playerTexture, 200, 160, nonWalkableLayers, walls, corners);
+        player = new Player(playerTexture, 200, 160, nonWalkableLayers, walls, corners, 30, 30);
         speedBoost = new SpeedBoost(speedBoostTexture, 300, 100);
+        
+        // Dean
+        deanTexture = new Texture("door.jpg");
+        dean = new Dean(deanTexture, 550f, 480f, nonWalkableLayers, walls, corners, 400f, 410f, 200f, 165f, 50, 50);
 
         stage = new Stage(new ScreenViewport());
         font = new BitmapFont();
@@ -114,10 +123,10 @@ public class Main implements ApplicationListener {
 
         // doors
         doorTexture = new Texture("door.jpg");
-        doors.add(new Door(490, 580, 45, 45, doorTexture));
+        doors.add(new Door(485, 580, 52, 52, doorTexture));
         
         keyTexture = new Texture("keycard1.png");
-        key = new Key(550, 480, 20, 20, keyTexture);
+        key = new Key(550, 480, 30, 30, keyTexture);
 
         playButton = new TextButton("Play Game", skin);
         playButton.setPosition(500,500);
@@ -156,23 +165,29 @@ public class Main implements ApplicationListener {
     /* The render function  */
     @Override
     public void render() {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        if (mainMenu) {
-            stage.act(Gdx.graphics.getDeltaTime());
-            stage.draw();
+    	if (getScreen() != null) {
+            super.render();
         }
-        else {
-            togglePause();
-            if (!isPaused) {
-                input();
-                logic();
-                updateTimer();
-                speedBoost();
-            }
-            draw();
-        }
+    	else {
+	        Gdx.gl.glClearColor(0, 0, 0, 1);
+	        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	
+	        if (mainMenu) {
+	            stage.act(Gdx.graphics.getDeltaTime());
+	            stage.draw();
+	        }
+	        else {
+	            togglePause();
+	            if (!isPaused) {
+	                input();
+	                logic();
+	                updateTimer();
+	                speedBoost();
+	                dean.update();
+	            }
+	            draw();
+	        }
+    	}
     }
 
     public void speedBoost() {
@@ -207,6 +222,11 @@ public class Main implements ApplicationListener {
                 door.unlock();
             }
         }
+        
+        // Dean
+        if (dean.checkCollision(player.getCollision())){
+        	gameOver();
+        }
     }
 
     private void draw() {
@@ -232,6 +252,9 @@ public class Main implements ApplicationListener {
         }
         
         key.draw(spriteBatch);
+        
+        dean.draw(spriteBatch);
+        
 
         spriteBatch.end();
 
@@ -246,7 +269,8 @@ public class Main implements ApplicationListener {
     
     // Called when timer runs out or caught.
     public void gameOver() {
-        
+    	// need to calculate points
+    	this.setScreen(new EndGameScreen(this, false, 0));
     }
 
     private void updateTimer() {
@@ -278,5 +302,7 @@ public class Main implements ApplicationListener {
         doorTexture.dispose();
         speedBoost.dispose();
         keyTexture.dispose();
+        deanTexture.dispose();
+
     }
 }

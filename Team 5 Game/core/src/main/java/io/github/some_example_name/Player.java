@@ -19,6 +19,8 @@ public class Player {
     private float speedModifier = 1.5f;
     private float playerSpeed = 40f * speedModifier;
     private Rectangle playerCollision;
+    protected int sizeX;
+    protected int sizeY;
 
     Array<TiledMapTileLayer> nonWalkable;
     TiledMapTileLayer walls;
@@ -26,11 +28,11 @@ public class Player {
 
     // Player constructor
     public Player(Texture playerTexture, float startXPosition, float startYPosition,
-                  Array<TiledMapTileLayer> nonWalkableLayers, TiledMapTileLayer wallLayer, TiledMapTileLayer cornerLayer) {
+                  Array<TiledMapTileLayer> nonWalkableLayers, TiledMapTileLayer wallLayer, TiledMapTileLayer cornerLayer, int sizeX, int sizeY) {
         sprite = new Sprite(playerTexture);
         position = new Vector2(startXPosition, startYPosition);
         sprite.setPosition(position.x, position.y);
-        sprite.setSize(20, 20);
+        sprite.setSize(sizeX, sizeY);
 
         this.nonWalkable = nonWalkableLayers;
         this.walls = wallLayer;
