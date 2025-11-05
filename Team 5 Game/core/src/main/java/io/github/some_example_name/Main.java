@@ -78,7 +78,7 @@ public class Main extends Game {
 
     	// Prepare your application here.
         backgroundTexture = new Texture("background.png"); //Background is a placeholder
-        playerTexture = new Texture("bucket.png"); //bucket is a placeholder
+        playerTexture = new Texture("player1.png"); //bucket is a placeholder
         speedBoostTexture = new Texture("speed_boost_sprite.png");
         map = new TmxMapLoader().load("./maps/ENG.tmx");
 
@@ -98,7 +98,7 @@ public class Main extends Game {
         speedBoost = new SpeedBoost(speedBoostTexture, 300, 100);
 
         // Dean
-        deanTexture = new Texture("door.jpg");
+        deanTexture = new Texture("dean.jpg");
         dean = new Dean(deanTexture, 550f, 480f, nonWalkableLayers, walls, corners, 400f, 410f, 200f, 165f, 50, 50);
 
         stage = new Stage(new ScreenViewport());
@@ -122,7 +122,7 @@ public class Main extends Game {
         mapRenderer = new OrthogonalTiledMapRenderer(map);
 
         // doors
-        doorTexture = new Texture("door.jpg");
+        doorTexture = new Texture("door1.jpg");
         doors.add(new Door(485, 580, 52, 52, doorTexture));
 
         keyTexture = new Texture("keycard1.png");
