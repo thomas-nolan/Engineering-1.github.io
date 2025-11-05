@@ -3,7 +3,6 @@ package io.github.some_example_name;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-//import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
@@ -49,17 +48,19 @@ public class Main extends Game {
 
     // UI
     boolean isPaused;
+    boolean mainMenu = true;
     Stage stage;
     Skin skin;
+
     Label label;
     Label titleLabel;
     Label pausedLabel;
+
     TextButton playButton;
     TextButton exitButton;
-    boolean mainMenu = true;
 
     // Timer
-    double timer = 10.0;
+    double timer = 300.0;
 
     // Doors
     private Texture doorTexture;
@@ -73,12 +74,14 @@ public class Main extends Game {
     private Texture deanTexture;
     private Dean dean;
 
+    /* This method is called when the game is started, it is responsible
+     * for generating the map, textures, layers, characters and objects. */
     @Override
     public void create() {
 
-    	// Prepare your application here.
+        // Prepare your application here.
         backgroundTexture = new Texture("background.png"); //Background is a placeholder
-        playerTexture = new Texture("player1.png"); //bucket is a placeholder
+        playerTexture = new Texture("player1.png");
         speedBoostTexture = new Texture("speed_boost_sprite.png");
         map = new TmxMapLoader().load("./maps/ENG.tmx");
 
@@ -98,7 +101,7 @@ public class Main extends Game {
         speedBoost = new SpeedBoost(speedBoostTexture, 300, 100);
 
         // Dean
-        deanTexture = new Texture("dean.jpg");
+        deanTexture = new Texture("dean.png");
         dean = new Dean(deanTexture, 550f, 480f, nonWalkableLayers, walls, corners, 400f, 410f, 200f, 165f, 50, 50);
 
         stage = new Stage(new ScreenViewport());
@@ -107,22 +110,27 @@ public class Main extends Game {
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         Label.LabelStyle style = new Label.LabelStyle(font, Color.RED);
+
         label = new Label(Double.toString(timer) , style);
-        titleLabel = new Label("Team 5 Game", style);
-        pausedLabel = new Label("PAUSED", style);
-        titleLabel.setPosition(900, 1000);
         label.setPosition(900,1000);
+
+        titleLabel = new Label("Team 5 Game", style);
+        titleLabel.setPosition(900, 1000);
+
+        pausedLabel = new Label("PAUSED", style);
         pausedLabel.setPosition(950, 500);
+
         stage.addActor(pausedLabel);
         stage.addActor(titleLabel);
         stage.addActor(label);
+
         label.setVisible(false);
         pausedLabel.setVisible(false);
 
         mapRenderer = new OrthogonalTiledMapRenderer(map);
 
         // doors
-        doorTexture = new Texture("door1.jpg");
+        doorTexture = new Texture("door1.png");
         doors.add(new Door(485, 580, 52, 52, doorTexture));
 
         keyTexture = new Texture("keycard1.png");
@@ -133,7 +141,7 @@ public class Main extends Game {
         playButton.setSize(200,50);
         playButton.addListener(new ClickListener() {
             @Override
-                public void clicked(InputEvent event, float x, float y) {
+            public void clicked(InputEvent event, float x, float y) {
                 mainMenu = false;
                 playButton.remove();
                 exitButton.remove();
@@ -147,7 +155,7 @@ public class Main extends Game {
         exitButton.setSize(200, 50);
         exitButton.addListener(new ClickListener() {
             @Override
-                public void clicked(InputEvent event, float x, float y) {
+            public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
             }
         });
@@ -165,29 +173,29 @@ public class Main extends Game {
     /* The render function  */
     @Override
     public void render() {
-    	if (getScreen() != null) {
+        if (getScreen() != null) {
             super.render();
         }
-    	else {
-	        Gdx.gl.glClearColor(0, 0, 0, 1);
-	        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        else {
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-	        if (mainMenu) {
-	            stage.act(Gdx.graphics.getDeltaTime());
-	            stage.draw();
-	        }
-	        else {
-	            togglePause();
-	            if (!isPaused) {
-	                input();
-	                logic();
-	                updateTimer();
-	                speedBoost();
-	                dean.update();
-	            }
-	            draw();
-	        }
-    	}
+            if (mainMenu) {
+                stage.act(Gdx.graphics.getDeltaTime());
+                stage.draw();
+            }
+            else {
+                togglePause();
+                if (!isPaused) {
+                    input();
+                    logic();
+                    updateTimer();
+                    speedBoost();
+                    dean.update();
+                }
+                draw();
+            }
+        }
     }
 
     public void speedBoost() {
@@ -200,10 +208,14 @@ public class Main extends Game {
         }
     }
 
+    /* Calls the player function update() which is
+     * responsible for controlling player movement. */
     private void input() {
         player.update(doors);
     }
-
+    /* Clamps the player between the world width and height
+     * preventing them from moving outside map bounds.
+     * This function also controls the door and keys. */
     private void logic() {
         float worldWidth = viewport.getWorldWidth();
         float worldHeight = viewport.getWorldHeight();
@@ -225,7 +237,7 @@ public class Main extends Game {
 
         // Dean
         if (dean.checkCollision(player.getCollision())){
-        	gameOver();
+            gameOver();
         }
     }
 
@@ -239,8 +251,6 @@ public class Main extends Game {
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
 
-        //spriteBatch.draw(backgroundTexture, 0, 0, worldWidth, worldHeight);
-        //font.draw(spriteBatch, "Hello", 1, 1);
         player.draw(spriteBatch);
 
         if ((speedBoost.getActive())) {
@@ -269,15 +279,21 @@ public class Main extends Game {
 
     // Called when timer runs out or caught.
     public void gameOver() {
-    	// need to calculate points
-    	this.setScreen(new EndGameScreen(this, false, 0));
+        // need to calculate points
+        this.setScreen(new EndGameScreen(this, false, 0));
     }
 
     private void updateTimer() {
         timer -= Gdx.graphics.getDeltaTime();
-        label.setText(Double.toString(timer));
+        int intTimer = (int) timer; // Converts to int to remove decimals
+        label.setText(Integer.toString(intTimer));
+
+        if (timer <= 0) {
+            gameOver();
+        }
     }
 
+    /* Responsible for activating and deactivating the pause menu */
     public void togglePause() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             isPaused = !isPaused;
@@ -303,6 +319,5 @@ public class Main extends Game {
         speedBoost.dispose();
         keyTexture.dispose();
         deanTexture.dispose();
-
     }
 }
