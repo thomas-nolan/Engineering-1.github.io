@@ -44,7 +44,7 @@ public class Player {
 
     /* Called by the main class every frame, responsible for player movement and collisions.
     * Player moves using arrow keys or WASD */
-    public void update(List<Door> doors) {
+    public void update(List<Door> doors, Event_TripWire tripWire) {
         float delta = Gdx.graphics.getDeltaTime();
 
         float moveX = 0;
@@ -78,6 +78,8 @@ public class Player {
                 break;
             }
         }
+
+        tripWire.checkTrigger(playerCollision);
 
         if (!blocked) {
             if (isWalkable(newXPosition, position.y)) position.x = newXPosition;
