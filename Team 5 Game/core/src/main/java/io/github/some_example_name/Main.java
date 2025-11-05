@@ -98,7 +98,7 @@ public class Main extends Game {
         speedBoost = new SpeedBoost(speedBoostTexture, 300, 100);
         
         // Dean
-        deanTexture = new Texture("door.jpg");
+        deanTexture = new Texture("dean.jpg");
         dean = new Dean(deanTexture, 550f, 480f, nonWalkableLayers, walls, corners, 400f, 410f, 200f, 165f, 50, 50);
 
         stage = new Stage(new ScreenViewport());
