@@ -24,10 +24,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.w3c.dom.DOMError;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends Game {
@@ -65,6 +68,8 @@ public class Main extends Game {
     // Doors
     private Texture doorTexture;
     private List<Door> doors = new ArrayList<>();
+
+    private Event_TripWire tripWire;
 
     private Texture keyTexture;
     private Key key;
@@ -130,9 +135,18 @@ public class Main extends Game {
         mapRenderer = new OrthogonalTiledMapRenderer(map);
 
         // doors
+
         doorTexture = new Texture("door1.png");
         doors.add(new Door(485, 580, 52, 52, doorTexture));
 
+        doorTexture = new Texture("door.jpg");
+        Door newDoor = new Door(485, 580, 52, 52, doorTexture);
+        newDoor.unlock();
+        Rectangle tripWireZone = new Rectangle(384, 480, 64, 64);
+        doors.add(newDoor);
+
+        tripWire = new Event_TripWire("tripwire", tripWireZone, newDoor);
+        
         keyTexture = new Texture("keycard1.png");
         key = new Key(550, 480, 30, 30, keyTexture);
 
@@ -163,6 +177,7 @@ public class Main extends Game {
         stage.addActor(exitButton);
         stage.addActor(playButton);
     }
+
 
     @Override
     public void resize(int width, int height) {
@@ -211,7 +226,7 @@ public class Main extends Game {
     /* Calls the player function update() which is
      * responsible for controlling player movement. */
     private void input() {
-        player.update(doors);
+        player.update(doors, tripWire);
     }
     /* Clamps the player between the world width and height
      * preventing them from moving outside map bounds.
@@ -252,6 +267,8 @@ public class Main extends Game {
         spriteBatch.begin();
 
         player.draw(spriteBatch);
+
+
 
         if ((speedBoost.getActive())) {
             speedBoost.draw(spriteBatch);
