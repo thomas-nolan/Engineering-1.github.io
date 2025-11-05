@@ -13,11 +13,11 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.List;
 
+/* This class implements the player character */
 public class Player {
     protected Sprite sprite;
     protected Vector2 position;
-    private float speedModifier = 1.5f;
-    private float playerSpeed = 40f * speedModifier;
+    private float playerSpeed = 40f;
     private Rectangle playerCollision;
     protected int sizeX;
     protected int sizeY;
@@ -26,7 +26,8 @@ public class Player {
     TiledMapTileLayer walls;
     TiledMapTileLayer corners;
 
-    // Player constructor
+    /* Player constructor
+    *  */
     public Player(Texture playerTexture, float startXPosition, float startYPosition,
                   Array<TiledMapTileLayer> nonWalkableLayers, TiledMapTileLayer wallLayer, TiledMapTileLayer cornerLayer, int sizeX, int sizeY) {
         sprite = new Sprite(playerTexture);
@@ -41,7 +42,8 @@ public class Player {
         playerCollision = new Rectangle(position.x, position.y, sprite.getWidth(), sprite.getHeight());
     }
 
-    // Movement and collision
+    /* Called by the main class every frame, responsible for player movement and collisions.
+    * Player moves using arrow keys or WASD */
     public void update(List<Door> doors) {
         float delta = Gdx.graphics.getDeltaTime();
 
@@ -86,12 +88,14 @@ public class Player {
         playerCollision.setPosition(position.x, position.y);
     }
 
+    /* This function checks that the position the player is moving to is walkable.
+    * This prevents the player from moving through walls or obstacles. */
     public boolean isWalkable(float xPosition, float yPosition) {
 
         for (TiledMapTileLayer layer : nonWalkable) {
             int tileXPosition = (int) (xPosition / layer.getTileWidth());
             int tileYPosition = (int) (yPosition / layer.getTileHeight());
-    
+
             TiledMapTileLayer.Cell cell1 = layer.getCell(tileXPosition, tileYPosition);
             TiledMapTileLayer.Cell cell2 = walls.getCell(tileXPosition, tileYPosition);
             boolean isNonWalkable = cell1 != null && cell1.getTile() != null;

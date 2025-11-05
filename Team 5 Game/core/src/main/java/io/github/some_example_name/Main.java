@@ -3,7 +3,6 @@ package io.github.some_example_name;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-//import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
@@ -26,7 +25,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.Array;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +47,7 @@ public class Main extends Game {
 
     // UI
     boolean isPaused;
+    boolean mainMenu = true;
     Stage stage;
     Skin skin;
     Label label;
@@ -56,29 +55,27 @@ public class Main extends Game {
     Label pausedLabel;
     TextButton playButton;
     TextButton exitButton;
-    boolean mainMenu = true;
 
     // Timer
-    double timer = 10.0;
+    double timer = 300.0;
 
     // Doors
     private Texture doorTexture;
     private List<Door> doors = new ArrayList<>();
-    
+
     private Texture keyTexture;
     private Key key;
     private boolean hasKey = false;
-    
+
     // Dean
     private Texture deanTexture;
     private Dean dean;
 
+    /* This method is called when the game is started, it is responsible
+    * for generating the map, textures, layers, characters and objects. */
     @Override
     public void create() {
-
-    	// Prepare your application here.
-        backgroundTexture = new Texture("background.png"); //Background is a placeholder
-        playerTexture = new Texture("bucket.png"); //bucket is a placeholder
+        playerTexture = new Texture("player1.png"); //bucket is a placeholder
         speedBoostTexture = new Texture("speed_boost_sprite.png");
         map = new TmxMapLoader().load("./maps/ENG.tmx");
 
@@ -87,7 +84,7 @@ public class Main extends Game {
         nonWalkableLayers.add((TiledMapTileLayer) map.getLayers().get("Non-walkable Objects 2"));
         nonWalkableLayers.add((TiledMapTileLayer) map.getLayers().get("Fence"));
         nonWalkableLayers.add((TiledMapTileLayer) map.getLayers().get("Trees"));
-        
+
         walls = (TiledMapTileLayer) map.getLayers().get("Edges");
         corners = (TiledMapTileLayer) map.getLayers().get("Corners");
 
@@ -96,9 +93,9 @@ public class Main extends Game {
 
         player = new Player(playerTexture, 200, 160, nonWalkableLayers, walls, corners, 30, 30);
         speedBoost = new SpeedBoost(speedBoostTexture, 300, 100);
-        
+
         // Dean
-        deanTexture = new Texture("door.jpg");
+        deanTexture = new Texture("dean.png");
         dean = new Dean(deanTexture, 550f, 480f, nonWalkableLayers, walls, corners, 400f, 410f, 200f, 165f, 50, 50);
 
         stage = new Stage(new ScreenViewport());
@@ -107,24 +104,29 @@ public class Main extends Game {
         Gdx.input.setInputProcessor(stage);
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         Label.LabelStyle style = new Label.LabelStyle(font, Color.RED);
+
         label = new Label(Double.toString(timer) , style);
-        titleLabel = new Label("Team 5 Game", style);
-        pausedLabel = new Label("PAUSED", style);
-        titleLabel.setPosition(900, 1000);
         label.setPosition(900,1000);
+
+        titleLabel = new Label("Team 5 Game", style);
+        titleLabel.setPosition(900, 1000);
+
+        pausedLabel = new Label("PAUSED", style);
         pausedLabel.setPosition(950, 500);
+
         stage.addActor(pausedLabel);
         stage.addActor(titleLabel);
         stage.addActor(label);
+
         label.setVisible(false);
         pausedLabel.setVisible(false);
 
         mapRenderer = new OrthogonalTiledMapRenderer(map);
 
-        // doors
+        // Doors
         doorTexture = new Texture("door.jpg");
         doors.add(new Door(485, 580, 52, 52, doorTexture));
-        
+
         keyTexture = new Texture("keycard1.png");
         key = new Key(550, 480, 30, 30, keyTexture);
 
@@ -171,7 +173,7 @@ public class Main extends Game {
     	else {
 	        Gdx.gl.glClearColor(0, 0, 0, 1);
 	        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	
+
 	        if (mainMenu) {
 	            stage.act(Gdx.graphics.getDeltaTime());
 	            stage.draw();
@@ -200,29 +202,34 @@ public class Main extends Game {
         }
     }
 
+    /* Calls the player function update() that is responsible for controlling
+    * player movement. */
     private void input() {
         player.update(doors);
     }
 
+    /* Clamps the player between the world width and height
+    * this prevents them from moving outside map bounds.
+    * This function also controls the door and keys. */
     private void logic() {
         float worldWidth = viewport.getWorldWidth();
         float worldHeight = viewport.getWorldHeight();
 
         player.clamp(worldWidth, worldHeight);
 
-        // door
+        // Door
         if (!key.isCollected() && key.collides(player.getCollision())) {
             key.collect();
             hasKey = true;
         }
 
-        // unlock door if player has key
+        // Unlock door if player has key
         if (hasKey) {
             for (Door door : doors) {
                 door.unlock();
             }
         }
-        
+
         // Dean
         if (dean.checkCollision(player.getCollision())){
         	gameOver();
@@ -239,8 +246,6 @@ public class Main extends Game {
         spriteBatch.setProjectionMatrix(camera.combined);
         spriteBatch.begin();
 
-        //spriteBatch.draw(backgroundTexture, 0, 0, worldWidth, worldHeight);
-        //font.draw(spriteBatch, "Hello", 1, 1);
         player.draw(spriteBatch);
 
         if ((speedBoost.getActive())) {
@@ -250,11 +255,11 @@ public class Main extends Game {
         for (Door door : doors) {
             door.draw(spriteBatch);
         }
-        
+
         key.draw(spriteBatch);
-        
+
         dean.draw(spriteBatch);
-        
+
 
         spriteBatch.end();
 
@@ -266,7 +271,7 @@ public class Main extends Game {
     public void pause() {}
     @Override
     public void resume() {}
-    
+
     // Called when timer runs out or caught.
     public void gameOver() {
     	// need to calculate points
@@ -275,9 +280,14 @@ public class Main extends Game {
 
     private void updateTimer() {
         timer -= Gdx.graphics.getDeltaTime();
-        label.setText(Double.toString(timer));
+        int intTimer = (int) timer; // Converts to int to remove decimals
+        label.setText(Integer.toString(intTimer));
+        if (timer <= 0) {
+            gameOver();
+        }
     }
 
+    /* Responsible for activating and deactivating the pause menu. */
     public void togglePause() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             isPaused = !isPaused;
@@ -291,7 +301,7 @@ public class Main extends Game {
     }
 
 
-    /* This function disposes of application resources freeing up memory*/
+    /* This function disposes of application resources freeing up memory */
     @Override
     public void dispose() {
         stage.dispose();
@@ -303,6 +313,5 @@ public class Main extends Game {
         speedBoost.dispose();
         keyTexture.dispose();
         deanTexture.dispose();
-
     }
 }
