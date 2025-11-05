@@ -78,7 +78,7 @@ public class Main extends Game {
 
     	// Prepare your application here.
         backgroundTexture = new Texture("background.png"); //Background is a placeholder
-        playerTexture = new Texture("bucket.png"); //bucket is a placeholder
+        playerTexture = new Texture("player1.png"); //bucket is a placeholder
         speedBoostTexture = new Texture("speed_boost_sprite.png");
         map = new TmxMapLoader().load("./maps/ENG.tmx");
 
