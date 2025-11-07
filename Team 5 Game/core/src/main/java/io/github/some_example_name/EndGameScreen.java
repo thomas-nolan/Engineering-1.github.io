@@ -75,9 +75,8 @@ public class EndGameScreen implements Screen{
             @Override
             //ignore the argument - used for specific click / place clicked
             public void clicked(InputEvent event, float x, float y) {
-            	// dispose()
-            	// game.resetGame() // maybe implement a reset
-                // game.setScreen(new MainMenuScreen(game)); // have a look for how mainMenue is called
+            	dispose();
+                game.setScreen(new MainMenu(game));
             }
         });
         stage.addActor(menuButton);
@@ -85,7 +84,9 @@ public class EndGameScreen implements Screen{
     }
 
     @Override
-    public void show() {}
+    public void show() {
+    	Gdx.input.setInputProcessor(stage);
+    }
 
     @Override
     public void render(float delta) {

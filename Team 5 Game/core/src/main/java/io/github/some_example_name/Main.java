@@ -1,6 +1,5 @@
 package io.github.some_example_name;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -33,12 +32,16 @@ import java.util.List;
 import org.w3c.dom.DOMError;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
+//This class is called from lwjgl3->src->java... _> Lwjgl3Launcher.java
+//Mimi - I redid this class and made it to be functional to a actual "main"
+//in which the main menu is then called first.
 public class Main extends Game {
     Texture backgroundTexture;
     Texture playerTexture;
     Texture speedBoostTexture;
 
     SpriteBatch spriteBatch;
+    public SpriteBatch batch;
     BitmapFont font;
     Player player;
     SpeedBoost speedBoost;
@@ -67,6 +70,7 @@ public class Main extends Game {
 
     // Doors
     private Texture doorTexture;
+    private Texture doorTexture2;
     private List<Door> doors = new ArrayList<>();
 
     private Event_TripWire tripWire;
@@ -78,6 +82,9 @@ public class Main extends Game {
     // Dean
     private Texture deanTexture;
     private Dean dean;
+
+    public boolean escaped;
+    public int score;
 
     /* This method is called when the game is started, it is responsible
      * for generating the map, textures, layers, characters and objects. */
@@ -137,10 +144,10 @@ public class Main extends Game {
         // doors
 
         doorTexture = new Texture("door1.png");
-        doors.add(new Door(485, 580, 52, 52, doorTexture));
+        //doors.add(new Door(485, 580, 52, 52, doorTexture));
 
-        doorTexture = new Texture("door.jpg");
-        Door newDoor = new Door(485, 580, 52, 52, doorTexture);
+        doorTexture2 = new Texture("door1.png");
+        Door newDoor = new Door(485, 580, 52, 52, doorTexture2);
         newDoor.unlock();
         Rectangle tripWireZone = new Rectangle(384, 480, 64, 64);
         doors.add(newDoor);
@@ -176,13 +183,10 @@ public class Main extends Game {
 
         stage.addActor(exitButton);
         stage.addActor(playButton);
-    }
-
-
-    @Override
-    public void resize(int width, int height) {
-        if (width <= 0 || height <= 0) return;
-        viewport.update(width, height, true);
+        
+        batch = new SpriteBatch();
+        //Calling the new class here
+        setScreen(new MainMenu(this)); // Start with the menu
     }
 
     /* The render function  */
@@ -336,5 +340,17 @@ public class Main extends Game {
         speedBoost.dispose();
         keyTexture.dispose();
         deanTexture.dispose();
+        
+        batch.dispose();
+        if (getScreen() != null) { 
+        	getScreen().dispose();
+        }
     }
+
+    // Method to start the game
+    public void startGame() {setScreen(new GamePlay(this)); }
+
+    public void endGame() {setScreen(new EndGameScreen(this, false, 0));}
+
+
 }
