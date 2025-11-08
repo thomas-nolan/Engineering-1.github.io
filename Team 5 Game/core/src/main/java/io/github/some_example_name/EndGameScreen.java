@@ -37,21 +37,21 @@ public class EndGameScreen implements Screen{
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         BitmapFont font = new BitmapFont();
         //Find a background texture to use and add it to assests
-        backgroundTexture = new Texture (Gdx.files.internal("background.png")); 
+        backgroundTexture = new Texture (Gdx.files.internal("background.png"));
         Image background = new Image(backgroundTexture);
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         background.setPosition(0, 0);
         stage.addActor(background);
 
 
-        //label message which depends on the boolean escaped 
-        Label.LabelStyle style = new Label.LabelStyle(font, Color.RED);
+        //label message and colour which depends on the boolean escaped
+        Label.LabelStyle style =  escaped ? new Label.LabelStyle(font, Color.GREEN) : new Label.LabelStyle(font, Color.RED);
         String message = escaped ? "Congratulations! You Escaped!" : "Unlucky, Better luck next time!";
         messageLabel = new Label(message, style);
         messageLabel.setFontScale(2f);
         messageLabel.setPosition(
-            Gdx.graphics.getWidth() / 2f - messageLabel.getWidth() / 2f, 
-            Gdx.graphics.getHeight() - 200
+            Gdx.graphics.getWidth() / 2f - messageLabel.getWidth() / 2f,
+            Gdx.graphics.getHeight() - 100
         );
         stage.addActor(messageLabel);
 
@@ -59,16 +59,16 @@ public class EndGameScreen implements Screen{
         scoreLabel = new Label(escaped ? "Score: " + score : " ", style);
         scoreLabel.setFontScale(1.5f);
         scoreLabel.setPosition(
-            Gdx.graphics.getWidth() / 2f - scoreLabel.getWidth() / 2f, 
+            Gdx.graphics.getWidth() / 2f - scoreLabel.getWidth() / 2f,
             Gdx.graphics.getHeight() - 300
             );
         stage.addActor(scoreLabel);
-        
+
         //button for main menu
         menuButton = new TextButton("Back to main menu", skin);
         menuButton.setSize(300, 80);
         menuButton.setPosition(
-            Gdx.graphics.getWidth() / 2f - menuButton.getWidth() / 2f, 
+            Gdx.graphics.getWidth() / 2f - menuButton.getWidth() / 2f,
             Gdx.graphics.getHeight() - 500
         );
         menuButton.addListener(new ClickListener(){
@@ -117,5 +117,4 @@ public class EndGameScreen implements Screen{
         backgroundTexture.dispose();
     }
 
-    
 }

@@ -25,7 +25,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class GamePlay implements Screen {
-	//textures
+	//Textures
     Texture playerTexture;
     Texture speedBoostTexture;
     Texture doorTexture;
@@ -38,7 +38,7 @@ public class GamePlay implements Screen {
     BitmapFont font;
     Player player;
     SpeedBoost speedBoost;
-    
+
     //map
     FitViewport viewport;
     TiledMap map;
@@ -56,7 +56,7 @@ public class GamePlay implements Screen {
     Label pausedLabel;
 
     // Timer
-    double timer = 10.0;
+    double timer = 300.0;
 
     // Doors
     private List<Door> doors = new ArrayList<>();
@@ -66,8 +66,7 @@ public class GamePlay implements Screen {
 
     // Dean
     private Dean dean;
-    
-    //
+
     private final Main main;
 
     public GamePlay(final Main game) {
@@ -111,9 +110,9 @@ public class GamePlay implements Screen {
         corners = (TiledMapTileLayer) map.getLayers().get("Corners");
 
         // Initialize game objects
-        player = new Player(playerTexture, 200, 160, nonWalkableLayers, walls, corners, 30, 30);
+        player = new Player(playerTexture, 775, 100, nonWalkableLayers, walls, corners, 30, 30);
         speedBoost = new SpeedBoost(speedBoostTexture, 300, 100);
-        
+
         //dean
         dean = new Dean(deanTexture, 550f, 480f, nonWalkableLayers, walls, corners, 410f, 425f, 180f, 145f, 50, 50);
 
@@ -128,8 +127,8 @@ public class GamePlay implements Screen {
         label = new Label(String.format("%.1f", timer), style);
         pausedLabel = new Label("PAUSED", style);
 
-        label.setPosition(900, 1000);
-        pausedLabel.setPosition(950, 500);
+        label.setPosition(900, 1000); // At the top of the screen
+        pausedLabel.setPosition(900, 500); // Displayed at the centre of the screen
 
         stage.addActor(pausedLabel);
         stage.addActor(label);
@@ -137,20 +136,17 @@ public class GamePlay implements Screen {
 
         mapRenderer = new OrthogonalTiledMapRenderer(map);
 
-        //doors.add(new Door(485, 580, 52, 52, doorTexture));
-        
         Door door = new Door(485, 580, 52, 52, doorTexture2);
         door.unlock();
         doors.add(door);
-        
+
         Rectangle tripWireZone = new Rectangle(384, 480, 64, 64);
         tripWire = new Event_TripWire("tripwire", tripWireZone, door);
-        
+
         // Set up key
         key = new Key(760, 420, 50, 50, keyTexture);
-        
+
         deanAreaDebug = new Texture(Gdx.files.internal("door.jpg"));
-        
 
         System.out.println("GamePlay screen loaded successfully");
     }
@@ -213,7 +209,13 @@ public class GamePlay implements Screen {
 
         // Dean collision
         if (dean.checkCollision(player.getCollision())) {
-            gameOver();
+            gameOver(false);
+        }
+
+        for (Door door : doors) {
+            if (door.collides(player.getCollision())) {
+                gameOver(true);
+            }
         }
     }
 
@@ -241,8 +243,6 @@ public class GamePlay implements Screen {
 
         key.draw(spriteBatch);
         dean.draw(spriteBatch);
-        
-        //spriteBatch.draw(deanAreaDebug, 410, 425, 180, 145);
 
         spriteBatch.end();
 
@@ -262,14 +262,22 @@ public class GamePlay implements Screen {
         Gdx.input.setInputProcessor(null);
     }
 
-    public void gameOver() {
+    public void gameOver(boolean hasWon) {
         System.out.println("Game Over!");
-        main.endGame();
+        if (hasWon) {
+            main.winGame();
+        }
+        else {
+            main.endGame();
+        }
     }
 
     private void updateTimer(float delta) {
         timer -= delta;
         label.setText(String.format("%.1f", timer));
+        if (timer <= 0) {
+            gameOver(false);
+        }
     }
 
     public void togglePause() {

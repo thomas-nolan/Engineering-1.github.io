@@ -37,7 +37,7 @@ import org.w3c.dom.DOMError;
 //in which the main menu is then called first.
 public class Main extends Game {
 	public SpriteBatch batch;
-	
+
 	/*
     Texture backgroundTexture;
     Texture playerTexture;
@@ -90,15 +90,15 @@ public class Main extends Game {
 
     // This method is called when the game is started, it is responsible
     // for generating the map, textures, layers, characters and objects.
-	
+
 	*/
     @Override
     public void create() {
-    	
+
     	batch = new SpriteBatch();
         //Calling the new class here
         setScreen(new MainMenu(this)); // Start with the menu
-    	
+
     	/*
         // Prepare your application here.
         backgroundTexture = new Texture("background.png"); //Background is a placeholder
@@ -162,7 +162,7 @@ public class Main extends Game {
         doors.add(newDoor);
 
         tripWire = new Event_TripWire("tripwire", tripWireZone, newDoor);
-        
+
         keyTexture = new Texture("keycard1.png");
         key = new Key(550, 480, 30, 30, keyTexture);
 
@@ -194,7 +194,7 @@ public class Main extends Game {
         stage.addActor(playButton);
         */
     }
-    
+
     /* The render function  */
     @Override
     public void render() {
@@ -225,11 +225,11 @@ public class Main extends Game {
         }
         */
     }
-    
+
   //This function disposes of application resources freeing up memory
     @Override
     public void dispose() {
-    	
+
     	/*
         stage.dispose();
         skin.dispose();
@@ -241,9 +241,9 @@ public class Main extends Game {
         keyTexture.dispose();
         deanTexture.dispose();
         */
-        
+
         batch.dispose();
-        if (getScreen() != null) { 
+        if (getScreen() != null) {
         	getScreen().dispose();
         }
     }
@@ -252,6 +252,8 @@ public class Main extends Game {
     public void startGame() {setScreen(new GamePlay(this)); }
 
     public void endGame() {setScreen(new EndGameScreen(this, false, 0));}
+
+    public void winGame() {setScreen(new EndGameScreen(this, true, 0));}
 
     /*
     public void speedBoost() {
@@ -364,9 +366,5 @@ public class Main extends Game {
         }
     }
     */
-
-
-    
-
 
 }
