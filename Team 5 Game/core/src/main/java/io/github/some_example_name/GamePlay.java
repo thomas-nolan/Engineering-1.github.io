@@ -114,7 +114,7 @@ public class GamePlay implements Screen {
         speedBoost = new SpeedBoost(speedBoostTexture, 300, 100);
 
         //dean
-        dean = new Dean(deanTexture, 550f, 480f, nonWalkableLayers, walls, corners, 410f, 425f, 180f, 145f, 50, 50);
+        dean = new Dean(deanTexture, 550f, 480f, nonWalkableLayers, walls, corners, 425f, 425f, 180f, 145f, 50, 50);
 
         // Set up UI (only game UI, no menu)
         stage = new Stage(new ScreenViewport());
@@ -139,13 +139,15 @@ public class GamePlay implements Screen {
         Door door = new Door(485, 580, 52, 52, doorTexture2);
         door.unlock();
         doors.add(door);
-
-        Rectangle tripWireZone = new Rectangle(384, 480, 64, 64);
+        
+        Rectangle tripWireZone = new Rectangle(378, 500, 32, 32);
+        
         tripWire = new Event_TripWire("tripwire", tripWireZone, door);
 
         // Set up key
         key = new Key(760, 420, 50, 50, keyTexture);
-
+        
+        //debug
         deanAreaDebug = new Texture(Gdx.files.internal("door.jpg"));
 
         System.out.println("GamePlay screen loaded successfully");
@@ -243,6 +245,9 @@ public class GamePlay implements Screen {
 
         key.draw(spriteBatch);
         dean.draw(spriteBatch);
+        
+        //debug
+        //spriteBatch.draw(deanAreaDebug, 425, 425, 180, 145);
 
         spriteBatch.end();
 
