@@ -253,7 +253,7 @@ public class Main extends Game {
 
     public void endGame() {setScreen(new EndGameScreen(this, false, 0));}
 
-    public void winGame() {setScreen(new EndGameScreen(this, true, 0));}
+    public void winGame(int points) {setScreen(new EndGameScreen(this, true, points));}
 
     /*
     public void speedBoost() {

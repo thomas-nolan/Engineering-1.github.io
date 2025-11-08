@@ -2,7 +2,6 @@ package io.github.some_example_name;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -24,6 +23,11 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+/* This class handles the main game screen.
+ * This class creates the map, player, dean
+ * and any objects as well as a timer and pause menu
+ * that can be activated by player input.
+ */
 public class GamePlay implements Screen {
 	//Textures
     Texture playerTexture;
@@ -54,6 +58,10 @@ public class GamePlay implements Screen {
     Skin skin;
     Label label;
     Label pausedLabel;
+    // Label styles (red, yellow and green)
+    Label.LabelStyle redStyle;
+    Label.LabelStyle yellowStyle;
+    Label.LabelStyle greenStyle;
 
     // Timer
     double timer = 300.0;
@@ -68,6 +76,9 @@ public class GamePlay implements Screen {
     private Dean dean;
 
     private final Main main;
+
+    // Points
+    Points points = new Points();
 
     public GamePlay(final Main game) {
         this.main = game;
@@ -110,7 +121,7 @@ public class GamePlay implements Screen {
         corners = (TiledMapTileLayer) map.getLayers().get("Corners");
 
         // Initialize game objects
-        player = new Player(playerTexture, 775, 100, nonWalkableLayers, walls, corners, 30, 30);
+        player = new Player(playerTexture, 775, 100, nonWalkableLayers, walls, corners, 40, 40);
         speedBoost = new SpeedBoost(speedBoostTexture, 300, 100);
 
         //dean
@@ -123,9 +134,11 @@ public class GamePlay implements Screen {
         font = new BitmapFont();
         font.getData().setScale(2.5f);
 
-        Label.LabelStyle style = new Label.LabelStyle(font, Color.RED);
-        label = new Label(String.format("%.1f", timer), style);
-        pausedLabel = new Label("PAUSED", style);
+        redStyle = new Label.LabelStyle(font, Color.RED);
+        yellowStyle = new Label.LabelStyle(font, Color.YELLOW);
+        greenStyle = new Label.LabelStyle(font, Color.GREEN);
+        label = new Label(String.format("%.1f", timer), greenStyle);
+        pausedLabel = new Label("PAUSED", greenStyle);
 
         label.setPosition(900, 1000); // At the top of the screen
         pausedLabel.setPosition(900, 500); // Displayed at the centre of the screen
@@ -211,6 +224,7 @@ public class GamePlay implements Screen {
 
         // Dean collision
         if (dean.checkCollision(player.getCollision())) {
+            points.deanCaughtYou();
             gameOver(false);
         }
 
@@ -270,7 +284,8 @@ public class GamePlay implements Screen {
     public void gameOver(boolean hasWon) {
         System.out.println("Game Over!");
         if (hasWon) {
-            main.winGame();
+            points.calcPoints(timer);
+            main.winGame(points.getScore());
         }
         else {
             main.endGame();
@@ -279,6 +294,12 @@ public class GamePlay implements Screen {
 
     private void updateTimer(float delta) {
         timer -= delta;
+        if (timer <= 150 && timer >= 60) {
+            label.setStyle(yellowStyle);
+        }
+        if (timer <= 60) {
+            label.setStyle(redStyle);
+        }
         label.setText(String.format("%.1f", timer));
         if (timer <= 0) {
             gameOver(false);

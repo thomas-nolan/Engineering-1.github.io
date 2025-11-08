@@ -4,6 +4,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
+/* A class for the SpeedBoost item.
+ * 
+ * This item looks like a coffee cup and is 
+ * located somewhere in the game
+ * When the player touches it, their speed is doubled
+ * for the rest of the game
+ * It disappears once activated
+ */
 public class SpeedBoost {
     private Texture texture;
     private Sprite boostSprite;
@@ -11,7 +19,11 @@ public class SpeedBoost {
     private float collisionRadius;
     private boolean active;
 
-
+    /* Constructor for the SpeedBoost
+     * @param texture - The texture for the item (coffee cup)
+     * @param xPostion - The item's position on the x-axis
+     * @param yPostion - The item's postion on the y-axis
+     */
     public SpeedBoost(Texture texture, float xPosition, float yPosition) {
         this.texture = texture;
         this.boostSprite = new Sprite(texture);
@@ -20,6 +32,7 @@ public class SpeedBoost {
         this.active = true;
     }
 
+    // Checks for player collision
     public boolean checkCollision(Player player) {
         Vector2 playerPosition = player.getPosition();
         if (Math.abs(playerPosition.x - position.x) <= collisionRadius && Math.abs(playerPosition.y - position.y) <= collisionRadius) {
@@ -41,6 +54,7 @@ public class SpeedBoost {
         }
     }
 
+    // Removes item once activated
     public void deactivate() {
         this.active = false;
     }

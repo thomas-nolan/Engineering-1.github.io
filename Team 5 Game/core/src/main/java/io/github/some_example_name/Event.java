@@ -1,10 +1,16 @@
 package io.github.some_example_name;
 
+/* This abstract class manages the multiple events that appear in the game
+     * 
+     * Each event is named and has a location.
+     * 
+*/
 public abstract class Event {
     private String name;
     private boolean isTriggered;
     private String location;
 
+    
     public Event(String name, String location) {
         this.name = name;
         this.location = location;
