@@ -25,20 +25,25 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class GamePlay implements Screen {
+	//textures
     Texture playerTexture;
     Texture speedBoostTexture;
     Texture doorTexture;
     Texture doorTexture2;
     Texture keyTexture;
     Texture deanTexture;
+    Texture deanAreaDebug;
 
     SpriteBatch spriteBatch;
     BitmapFont font;
     Player player;
     SpeedBoost speedBoost;
+    
+    //map
     FitViewport viewport;
     TiledMap map;
     OrthogonalTiledMapRenderer mapRenderer;
+    //map collision
     Array<TiledMapTileLayer> nonWalkableLayers;
     TiledMapTileLayer walls;
     TiledMapTileLayer corners;
@@ -61,6 +66,8 @@ public class GamePlay implements Screen {
 
     // Dean
     private Dean dean;
+    
+    //
     private final Main main;
 
     public GamePlay(final Main game) {
@@ -106,7 +113,9 @@ public class GamePlay implements Screen {
         // Initialize game objects
         player = new Player(playerTexture, 200, 160, nonWalkableLayers, walls, corners, 30, 30);
         speedBoost = new SpeedBoost(speedBoostTexture, 300, 100);
-        dean = new Dean(deanTexture, 550f, 480f, nonWalkableLayers, walls, corners, 400f, 410f, 200f, 165f, 50, 50);
+        
+        //dean
+        dean = new Dean(deanTexture, 550f, 480f, nonWalkableLayers, walls, corners, 410f, 425f, 180f, 145f, 50, 50);
 
         // Set up UI (only game UI, no menu)
         stage = new Stage(new ScreenViewport());
@@ -130,16 +139,17 @@ public class GamePlay implements Screen {
 
         //doors.add(new Door(485, 580, 52, 52, doorTexture));
         
-        Door secondDoor = new Door(485, 580, 52, 52, doorTexture2);
-        secondDoor.unlock();
-        doors.add(secondDoor);
+        Door door = new Door(485, 580, 52, 52, doorTexture2);
+        door.unlock();
+        doors.add(door);
         
         Rectangle tripWireZone = new Rectangle(384, 480, 64, 64);
-        tripWire = new Event_TripWire("tripwire", tripWireZone, secondDoor);
+        tripWire = new Event_TripWire("tripwire", tripWireZone, door);
         
         // Set up key
-        key = new Key(550, 480, 30, 30, keyTexture);
+        key = new Key(760, 420, 50, 50, keyTexture);
         
+        deanAreaDebug = new Texture(Gdx.files.internal("door.jpg"));
         
 
         System.out.println("GamePlay screen loaded successfully");
@@ -231,6 +241,8 @@ public class GamePlay implements Screen {
 
         key.draw(spriteBatch);
         dean.draw(spriteBatch);
+        
+        //spriteBatch.draw(deanAreaDebug, 410, 425, 180, 145);
 
         spriteBatch.end();
 

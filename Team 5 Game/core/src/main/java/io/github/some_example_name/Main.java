@@ -36,12 +36,14 @@ import org.w3c.dom.DOMError;
 //Mimi - I redid this class and made it to be functional to a actual "main"
 //in which the main menu is then called first.
 public class Main extends Game {
+	public SpriteBatch batch;
+	
+	/*
     Texture backgroundTexture;
     Texture playerTexture;
     Texture speedBoostTexture;
 
-    SpriteBatch spriteBatch;
-    public SpriteBatch batch;
+	SpriteBatch spriteBatch
     BitmapFont font;
     Player player;
     SpeedBoost speedBoost;
@@ -86,11 +88,18 @@ public class Main extends Game {
     public boolean escaped;
     public int score;
 
-    /* This method is called when the game is started, it is responsible
-     * for generating the map, textures, layers, characters and objects. */
+    // This method is called when the game is started, it is responsible
+    // for generating the map, textures, layers, characters and objects.
+	
+	*/
     @Override
     public void create() {
-
+    	
+    	batch = new SpriteBatch();
+        //Calling the new class here
+        setScreen(new MainMenu(this)); // Start with the menu
+    	
+    	/*
         // Prepare your application here.
         backgroundTexture = new Texture("background.png"); //Background is a placeholder
         playerTexture = new Texture("player1.png");
@@ -183,15 +192,14 @@ public class Main extends Game {
 
         stage.addActor(exitButton);
         stage.addActor(playButton);
-        
-        batch = new SpriteBatch();
-        //Calling the new class here
-        setScreen(new MainMenu(this)); // Start with the menu
+        */
     }
-
+    
     /* The render function  */
     @Override
     public void render() {
+    	super.render();
+    	/*
         if (getScreen() != null) {
             super.render();
         }
@@ -215,8 +223,37 @@ public class Main extends Game {
                 draw();
             }
         }
+        */
+    }
+    
+  //This function disposes of application resources freeing up memory
+    @Override
+    public void dispose() {
+    	
+    	/*
+        stage.dispose();
+        skin.dispose();
+        spriteBatch.dispose();
+        playerTexture.dispose();
+        backgroundTexture.dispose();
+        doorTexture.dispose();
+        speedBoost.dispose();
+        keyTexture.dispose();
+        deanTexture.dispose();
+        */
+        
+        batch.dispose();
+        if (getScreen() != null) { 
+        	getScreen().dispose();
+        }
     }
 
+    // Method to start the game
+    public void startGame() {setScreen(new GamePlay(this)); }
+
+    public void endGame() {setScreen(new EndGameScreen(this, false, 0));}
+
+    /*
     public void speedBoost() {
         boolean isActive = speedBoost.getActive();
         if (speedBoost.checkCollision(player) && isActive) {
@@ -227,14 +264,14 @@ public class Main extends Game {
         }
     }
 
-    /* Calls the player function update() which is
-     * responsible for controlling player movement. */
+    //Calls the player function update() which is
+    //responsible for controlling player movement.
     private void input() {
         player.update(doors, tripWire);
     }
-    /* Clamps the player between the world width and height
-     * preventing them from moving outside map bounds.
-     * This function also controls the door and keys. */
+    //Clamps the player between the world width and height
+    //preventing them from moving outside map bounds.
+    //This function also controls the door and keys.
     private void logic() {
         float worldWidth = viewport.getWorldWidth();
         float worldHeight = viewport.getWorldHeight();
@@ -314,7 +351,7 @@ public class Main extends Game {
         }
     }
 
-    /* Responsible for activating and deactivating the pause menu */
+    //Responsible for activating and deactivating the pause menu
     public void togglePause() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             isPaused = !isPaused;
@@ -326,31 +363,10 @@ public class Main extends Game {
             }
         }
     }
+    */
 
 
-    /* This function disposes of application resources freeing up memory*/
-    @Override
-    public void dispose() {
-        stage.dispose();
-        skin.dispose();
-        spriteBatch.dispose();
-        playerTexture.dispose();
-        backgroundTexture.dispose();
-        doorTexture.dispose();
-        speedBoost.dispose();
-        keyTexture.dispose();
-        deanTexture.dispose();
-        
-        batch.dispose();
-        if (getScreen() != null) { 
-        	getScreen().dispose();
-        }
-    }
-
-    // Method to start the game
-    public void startGame() {setScreen(new GamePlay(this)); }
-
-    public void endGame() {setScreen(new EndGameScreen(this, false, 0));}
+    
 
 
 }

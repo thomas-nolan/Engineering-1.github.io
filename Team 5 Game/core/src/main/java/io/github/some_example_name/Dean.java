@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Array;
 
 
 public class Dean extends Player{
-    private float deanSpeed = 40f;
+    private float deanSpeed = 70f;
     //TiledMapTileLayer nonWalkable;
     //TiledMapTileLayer walls;
     //TiledMapTileLayer corners;
@@ -62,10 +62,18 @@ public class Dean extends Player{
                 position.y = newY;
             }
         }
-
+        
         float clampedX = MathUtils.clamp(position.x, roomX, roomX + roomWidth - sprite.getWidth());
-        float clampedY = MathUtils.clamp(position.y, roomY, roomY + roomHeight-sprite.getHeight());
-        position.set(clampedX,clampedY);
+        float clampedY = MathUtils.clamp(position.y, roomY, roomY + roomHeight - sprite.getHeight());
+
+        if (position.x != clampedX || position.y != clampedY) {
+            position.set(clampedX, clampedY);
+            
+            targetPosition = new Vector2(
+                roomX + (float)Math.random() * (roomWidth - sprite.getWidth()),
+                roomY + (float)Math.random() * (roomHeight - sprite.getHeight())
+            );
+        }
 
         //update the sprite and rectangle position
         sprite.setPosition(position.x, position.y);
