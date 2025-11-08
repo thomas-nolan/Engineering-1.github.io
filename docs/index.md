@@ -8,7 +8,7 @@ In addition we have also provided the game files for you to play.
 
 - Requirements document (enter file here)
 - Architecture document (enter file here)
-- Method selection and planning document (enter file here)
+- [Method selection and planning document](docs/Method_selection_and_planning.pdf)
 - Risk assessment and mitigation document (enter file here)
 - Implementation document (enter file here)
 
