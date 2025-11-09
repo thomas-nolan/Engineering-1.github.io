@@ -1,8 +1,6 @@
 package io.github.some_example_name;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.MathUtils;
@@ -13,17 +11,14 @@ import com.badlogic.gdx.utils.Array;
 
 public class Dean extends Player{
     private float deanSpeed = 70f;
-    //TiledMapTileLayer nonWalkable;
-    //TiledMapTileLayer walls;
-    //TiledMapTileLayer corners;
     private Vector2 targetPosition;
     private float tolerance = 2f;
     private float roomX, roomY, roomWidth, roomHeight;
     private Rectangle deanRect;
-    
 
-    public Dean(Texture deanTexture, float startXPosition, float startYPosition, 
-                Array<TiledMapTileLayer> nonWalkableLayer, TiledMapTileLayer wallLayer, 
+
+    public Dean(Texture deanTexture, float startXPosition, float startYPosition,
+                Array<TiledMapTileLayer> nonWalkableLayer, TiledMapTileLayer wallLayer,
                 TiledMapTileLayer cornerLayer, float roomX, float roomY, float roomWidth, float roomHeight, int sizeX, int sizeY) {
         super(deanTexture, startXPosition, startYPosition, nonWalkableLayer, wallLayer, cornerLayer, sizeX, sizeY);
         this.roomX = roomX;
@@ -62,13 +57,13 @@ public class Dean extends Player{
                 position.y = newY;
             }
         }
-        
+
         float clampedX = MathUtils.clamp(position.x, roomX, roomX + roomWidth - sprite.getWidth());
         float clampedY = MathUtils.clamp(position.y, roomY, roomY + roomHeight - sprite.getHeight());
 
         if (position.x != clampedX || position.y != clampedY) {
             position.set(clampedX, clampedY);
-            
+
             targetPosition = new Vector2(
                 roomX + (float)Math.random() * (roomWidth - sprite.getWidth()),
                 roomY + (float)Math.random() * (roomHeight - sprite.getHeight())
@@ -78,7 +73,7 @@ public class Dean extends Player{
         //update the sprite and rectangle position
         sprite.setPosition(position.x, position.y);
         deanRect.setPosition(position.x, position.y);
-        
+
     }
     // if dean catches you
     public boolean checkCollision(Rectangle playerRect){

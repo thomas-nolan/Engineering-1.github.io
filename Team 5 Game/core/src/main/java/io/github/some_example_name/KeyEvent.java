@@ -3,13 +3,12 @@ package io.github.some_example_name;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 
 /* A class for the key item
- * 
- * The key (keycard) is located in the map and is 
+ *
+ * The key (keycard) is located in the map and is
  * necessary to complete the game.
- * 
+ *
  * It unlocks the exit door in the Dean's office.
  * It disappears once activated
  */
@@ -45,7 +44,7 @@ public class KeyEvent extends Event {
     }
 
     @Override
-    public void trigger() { 
+    public void trigger() {
         if (!isTriggered()) {
             setTriggered(true);
             incrementEventsCounter();

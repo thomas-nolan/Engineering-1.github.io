@@ -1,14 +1,8 @@
 package io.github.some_example_name;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.badlogic.gdx.graphics.Texture;
 
 public class Door {
 	private Rectangle doorCollision;
@@ -36,16 +30,16 @@ public class Door {
             isLocked = false;
         }
     }
-    
+
     public boolean collides(Rectangle playerCollision) {
     	return doorCollision.overlaps(playerCollision);
     }
-    
+
     public void draw(SpriteBatch sprite) {
     	if (isLocked) {
     		sprite.draw(texture, doorCollision.x, doorCollision.y, doorCollision.width, doorCollision.height);
     	}
     }
-    
-    
+
+
 }

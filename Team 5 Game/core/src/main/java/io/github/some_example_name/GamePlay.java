@@ -29,7 +29,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
  * that can be activated by player input.
  */
 public class GamePlay implements Screen {
-	//Textures
+	// Textures
     Texture playerTexture;
     Texture speedBoostTexture;
     Texture doorTexture;
@@ -42,21 +42,23 @@ public class GamePlay implements Screen {
     Player player;
     SpeedBoostEvent speedBoost;
 
-    //map
+    // map
     FitViewport viewport;
     TiledMap map;
     OrthogonalTiledMapRenderer mapRenderer;
     Rectangle finishZone;
-    //map collision
+    // map collision
     Array<TiledMapTileLayer> nonWalkableLayers;
     TiledMapTileLayer walls;
     TiledMapTileLayer corners;
 
     // UI
     boolean isPaused;
+    boolean speedBoostActive = false;
     Stage stage;
     Skin skin;
     Label label;
+    Label boostLabel;
     Label pausedLabel;
     // Label styles (red, yellow and green)
     Label.LabelStyle redStyle;
@@ -65,6 +67,7 @@ public class GamePlay implements Screen {
 
     // Timer
     double timer = 300.0;
+    double boostTimer = 30f; // For speed boost
 
     // Doors
     private List<Door> doors = new ArrayList<>();
@@ -80,7 +83,7 @@ public class GamePlay implements Screen {
     // Points
     Points points = new Points();
 
-    //constructor
+    // constructor
     public GamePlay(final Main game) {
         this.main = game;
     }
@@ -97,9 +100,6 @@ public class GamePlay implements Screen {
 
         spriteBatch = new SpriteBatch();
 
-        
-        
-        
         // Load textures
         playerTexture = new Texture(Gdx.files.internal("player1.png"));
         speedBoostTexture = new Texture(Gdx.files.internal("speed_boost_sprite.png"));
@@ -108,9 +108,6 @@ public class GamePlay implements Screen {
         deanTexture = new Texture(Gdx.files.internal("dean.png"));
 
         System.out.println("Textures loaded successfully");
-        
-        
-        
 
         // Load map
         map = new TmxMapLoader().load(Gdx.files.internal("maps/ENG.tmx").file().getPath());
@@ -125,38 +122,34 @@ public class GamePlay implements Screen {
 
         walls = (TiledMapTileLayer) map.getLayers().get("Edges");
         corners = (TiledMapTileLayer) map.getLayers().get("Corners");
-        
+
         mapRenderer = new OrthogonalTiledMapRenderer(map);
 
-        
-        
-        
         // Initialize game objects
-        //player
+        // player
         player = new Player(playerTexture, 775, 100, nonWalkableLayers, walls, corners, 40, 40);
-        
-        //speedboost
+
+        // speedboost
         speedBoost = new SpeedBoostEvent("SpeedBoost", speedBoostTexture, 680, 490);
 
-        //dean
+        // dean
         dean = new Dean(deanTexture, 550f, 480f, nonWalkableLayers, walls, corners, 425f, 425f, 180f, 145f, 50, 50);
 
-        //doors
+        // doors
         Door door = new Door(485, 580, 52, 52, doorTexture);
         door.unlock();
         doors.add(door);
-        
-        //key
+
+        // key
         Rectangle keyZone = new Rectangle(1472, 480, 35, 35);
         key = new KeyEvent("Keycard", keyZone, keyTexture);
-        
-        //tripwire
+
+        // tripwire
         Rectangle tripWireZone = new Rectangle(378, 500, 32, 32);
         tripWire = new TripwireEvent("tripwire", tripWireZone, door);
-        
+
         finishZone = new Rectangle(0, 864, 32, 128);
-        
-        
+
         // Set up UI (only game UI, no menu)
         stage = new Stage(new ScreenViewport());
 
@@ -168,38 +161,31 @@ public class GamePlay implements Screen {
         yellowStyle = new Label.LabelStyle(font, Color.YELLOW);
         greenStyle = new Label.LabelStyle(font, Color.GREEN);
         label = new Label(String.format("%.1f", timer), greenStyle);
+        boostLabel = new Label(String.format("%.1f", boostTimer), greenStyle);
         pausedLabel = new Label("PAUSED", greenStyle);
 
         label.setPosition(900, 1000); // At the top of the screen
+        boostLabel.setPosition(500, 1000);
         pausedLabel.setPosition(900, 500); // Displayed at the centre of the screen
 
         stage.addActor(pausedLabel);
         stage.addActor(label);
+        boostLabel.setVisible(false);
         pausedLabel.setVisible(false);
 
         mapRenderer = new OrthogonalTiledMapRenderer(map);
 
-        
-
-        
-        
-        
-        
         // Set up UI (only game UI, no menu)
         stage = new Stage(new ScreenViewport());
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         font = new BitmapFont();
         font.getData().setScale(2.5f);
-        Label.LabelStyle style = new Label.LabelStyle(font, Color.RED);
-        label = new Label(String.format("%.1f", timer), style);
-        pausedLabel = new Label("PAUSED", style);
         label.setPosition(900, 1000); // At the top of the screen
         pausedLabel.setPosition(900, 500); // Displayed at the centre of the screen
         stage.addActor(pausedLabel);
         stage.addActor(label);
+        stage.addActor(boostLabel);
         pausedLabel.setVisible(false);
-
-        
 
         System.out.println("GamePlay screen loaded successfully");
     }
@@ -232,10 +218,16 @@ public class GamePlay implements Screen {
     public void speedBoost() {
         if (!speedBoost.isTriggered() && speedBoost.checkCollision(player)) {
             speedBoost.trigger();
-            float newSpeed = player.getPlayerSpeed();
-            newSpeed *= 2;
-            player.setPlayerSpeed(newSpeed);
+            boostLabel.setVisible(true);
+            speedBoostActive = true;
+            modifySpeed(2); // Doubles player speed
         }
+    }
+
+    /* Changes the player speed by a modifier given as parameter
+    * @param modifier - 2 or 0.5 */
+    public void modifySpeed(float modifier) {
+        player.setPlayerSpeed((player.getPlayerSpeed()) * modifier);
     }
 
     private void input() {
@@ -251,14 +243,13 @@ public class GamePlay implements Screen {
         if (finishZone.overlaps(player.getCollision())) {
             gameOver(true);
         }
-        
+
         // Key collection
         if (!key.isTriggered() && key.collides(player.getCollision()) && tripWire.isTriggered()) {
             key.trigger();
             hasKey = true;
         }
-        
-        
+
 
         // Unlock doors
         if (hasKey) {
@@ -267,13 +258,11 @@ public class GamePlay implements Screen {
             }
         }
 
-        
-        
+
         // Dean collision
         if (dean.checkCollision(player.getCollision())) {
             points.deanCaughtYou();
-
-            gameOver(false);
+            gameOver(false); // Triggers bad ending
         }
 
     }
@@ -309,9 +298,6 @@ public class GamePlay implements Screen {
 
         //draw dean
         dean.draw(spriteBatch);
-        
-        //debug
-        //spriteBatch.draw(deanAreaDebug, 425, 425, 180, 145);
 
         spriteBatch.end();
 
@@ -331,6 +317,10 @@ public class GamePlay implements Screen {
         Gdx.input.setInputProcessor(null);
     }
 
+    /* Called when the game is over.
+    * Responsible for displaying end screen and calculating final point score
+    * @param hasWon - If true, the good ending screen is shown.
+    * The bad ending screen is shown if false.*/
     public void gameOver(boolean hasWon) {
         Event.resetEventsCounter();
         System.out.println("Game Over!");
@@ -354,6 +344,16 @@ public class GamePlay implements Screen {
         label.setText(String.format("%.1f", timer));
         if (timer <= 0) {
             gameOver(false);
+        }
+        // Updates speed boost timer
+        if (speedBoostActive) {
+            boostTimer -= delta;
+            boostLabel.setText(String.format("%.1f", boostTimer));
+            if (boostTimer <= 0) {
+                modifySpeed(0.5f);
+                boostLabel.setVisible(false);
+                speedBoostActive = false;
+            }
         }
     }
 

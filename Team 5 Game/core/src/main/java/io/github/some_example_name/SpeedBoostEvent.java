@@ -5,12 +5,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 /* A class for the SpeedBoost item.
- * 
- * This item looks like a coffee cup and is 
+ *
+ * This item looks like a coffee cup and is
  * located somewhere in the game
  * When the player touches it, their speed is doubled
- * for the rest of the game
+ * for 30 seconds
  * It disappears once activated
+ *
  */
 public class SpeedBoostEvent extends Event{
     private Texture texture;
@@ -21,6 +22,7 @@ public class SpeedBoostEvent extends Event{
 
     /* Constructor for the SpeedBoost
      * @param texture - The texture for the item (coffee cup)
+     * @param name - Event name
      * @param xPostion - The item's position on the x-axis
      * @param yPostion - The item's postion on the y-axis
      */
