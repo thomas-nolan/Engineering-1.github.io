@@ -46,6 +46,7 @@ public class GamePlay implements Screen {
     FitViewport viewport;
     TiledMap map;
     OrthogonalTiledMapRenderer mapRenderer;
+    Rectangle finishZone;
     //map collision
     Array<TiledMapTileLayer> nonWalkableLayers;
     TiledMapTileLayer walls;
@@ -89,7 +90,7 @@ public class GamePlay implements Screen {
         System.out.println("GamePlay screen loading...");
 
         // Initialize viewport and camera FIRST
-        viewport = new FitViewport(1920, 1080);
+        viewport = new FitViewport(1600, 1120);
         OrthographicCamera camera = (OrthographicCamera) viewport.getCamera();
         camera.position.set(960, 540, 0);
         camera.update();
@@ -146,14 +147,14 @@ public class GamePlay implements Screen {
         doors.add(door);
         
         //key
-        Rectangle keyZone = new Rectangle(735, 480, 35, 35);
+        Rectangle keyZone = new Rectangle(1472, 480, 35, 35);
         key = new Key("Keycard", keyZone, keyTexture);
         
         //tripwire
         Rectangle tripWireZone = new Rectangle(378, 500, 32, 32);
         tripWire = new Tripwire("tripwire", tripWireZone, door);
         
-        
+        finishZone = new Rectangle(0, 864, 32, 128);
         
         
         // Set up UI (only game UI, no menu)
@@ -247,10 +248,12 @@ public class GamePlay implements Screen {
         float worldHeight = viewport.getWorldHeight();
         player.clamp(worldWidth, worldHeight);
 
-        
+        if (finishZone.overlaps(player.getCollision())) {
+            gameOver(true);
+        }
         
         // Key collection
-        if (!key.isTriggered() && key.collides(player.getCollision())) {
+        if (!key.isTriggered() && key.collides(player.getCollision()) && tripWire.isTriggered()) {
             key.trigger();
             hasKey = true;
         }
@@ -273,11 +276,6 @@ public class GamePlay implements Screen {
             gameOver(false);
         }
 
-        for (Door door : doors) {
-            if (door.collides(player.getCollision())) {
-                gameOver(true);
-            }
-        }
     }
 
     private void draw() {
@@ -305,8 +303,10 @@ public class GamePlay implements Screen {
         }
 
         //draw key
-        key.draw(spriteBatch);
-        
+        if (tripWire.isTriggered()) {
+            key.draw(spriteBatch);
+        }
+
         //draw dean
         dean.draw(spriteBatch);
         
