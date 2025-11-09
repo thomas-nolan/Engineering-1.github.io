@@ -47,12 +47,13 @@ The map is designed to mimic a university, it contains study areas, a reception 
 
 ### Player Movement / Controls
 - **Movement:** W/A/S/D or arrow keys
+- **Pause/unpause Game:** Esc key
 
 ### Difficulty
-At the moment the game is only based on one dificulty that being the base level although there are future plans to increase it as well as allow for different modes in future
+At the moment the game is only based on one difficulty that being the base level although there are future plans to increase it as well as allow for different modes in future
 
 ### Development Choices
-The desing of the map was based around the licensing of online assests. In addition we chose to use libGDX as it allowed for full cross compatibily with all platforms.
+The design of the map was based around the licensing of online assets. In addition we chose to use libGDX as it allowed for full cross compatibily with all platforms.
 
 ---
 
@@ -67,7 +68,7 @@ Java
 ### Dependencies / Libraries
 - [libGDX](https://libgdx.com/) - The main framework for the game
 - [Tiled](https://thorbjorn.itch.io/tiled) - .tmx Map editor
-- [Modern Interiors Tileset](https://limezu.itch.io/moderninteriors/devlog/244045/free-version-overview-18042021-update) - Tile set used for interious and walls
+- [Modern Interiors Tileset](https://limezu.itch.io/moderninteriors/devlog/244045/free-version-overview-18042021-update) - Tile set used for interiors and walls
 - [RPG Tileset](https://pipoya.itch.io/pipoya-rpg-tileset-32x32) - Tile set used for exteriors
 
 ### Project Structure
