@@ -42,7 +42,11 @@ public class EndGameScreen implements Screen{
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         BitmapFont font = new BitmapFont();
         //Find a background texture to use and add it to assests
-        backgroundTexture = new Texture (Gdx.files.internal("background.png"));
+        if (escaped) {
+            backgroundTexture = new Texture(Gdx.files.internal("endGameWin1.bmp"));
+        } else {
+            backgroundTexture = new Texture(Gdx.files.internal("endGameFail1.bmp"));
+        }
         Image background = new Image(backgroundTexture);
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         background.setPosition(0, 0);
