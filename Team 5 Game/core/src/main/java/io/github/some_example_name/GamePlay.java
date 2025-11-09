@@ -2,7 +2,6 @@ package io.github.some_example_name;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -24,12 +23,16 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+/* This class handles the main game screen.
+ * This class creates the map, player, dean
+ * and any objects as well as a timer and pause menu
+ * that can be activated by player input.
+ */
 public class GamePlay implements Screen {
 	//Textures
     Texture playerTexture;
     Texture speedBoostTexture;
     Texture doorTexture;
-    Texture doorTexture2;
     Texture keyTexture;
     Texture deanTexture;
     Texture deanAreaDebug;
@@ -54,6 +57,10 @@ public class GamePlay implements Screen {
     Skin skin;
     Label label;
     Label pausedLabel;
+    // Label styles (red, yellow and green)
+    Label.LabelStyle redStyle;
+    Label.LabelStyle yellowStyle;
+    Label.LabelStyle greenStyle;
 
     // Timer
     double timer = 300.0;
@@ -68,6 +75,9 @@ public class GamePlay implements Screen {
     private Dean dean;
 
     private final Main main;
+
+    // Points
+    Points points = new Points();
 
     //constructor
     public GamePlay(final Main game) {
@@ -93,7 +103,6 @@ public class GamePlay implements Screen {
         playerTexture = new Texture(Gdx.files.internal("player1.png"));
         speedBoostTexture = new Texture(Gdx.files.internal("speed_boost_sprite.png"));
         doorTexture = new Texture(Gdx.files.internal("door1.png"));
-        doorTexture2 = new Texture(Gdx.files.internal("door1.png"));
         keyTexture = new Texture(Gdx.files.internal("keycard1.png"));
         deanTexture = new Texture(Gdx.files.internal("dean.png"));
 
@@ -120,24 +129,55 @@ public class GamePlay implements Screen {
 
         
         
+        
         // Initialize game objects
-        player = new Player(playerTexture, 775, 100, nonWalkableLayers, walls, corners, 30, 30);
-        speedBoost = new SpeedBoost(speedBoostTexture, 300, 100);
+        //player
+        player = new Player(playerTexture, 775, 100, nonWalkableLayers, walls, corners, 40, 40);
+        
+        //speedboost
+        speedBoost = new SpeedBoost(speedBoostTexture, 680, 490);
 
         //dean
         dean = new Dean(deanTexture, 550f, 480f, nonWalkableLayers, walls, corners, 425f, 425f, 180f, 145f, 50, 50);
-        
-        //door
-        Door door = new Door(485, 580, 52, 52, doorTexture2);
+
+        //doors
+        Door door = new Door(485, 580, 52, 52, doorTexture);
         door.unlock();
         doors.add(door);
         
         //key
-        key = new Key(760, 420, 50, 50, keyTexture);
+        key = new Key(735, 480, 35, 35, keyTexture);
         
         //tripwire
         Rectangle tripWireZone = new Rectangle(378, 500, 32, 32);
         tripWire = new Event_TripWire("tripwire", tripWireZone, door);
+        
+        
+        
+        
+        // Set up UI (only game UI, no menu)
+        stage = new Stage(new ScreenViewport());
+
+        skin = new Skin(Gdx.files.internal("uiskin.json"));
+        font = new BitmapFont();
+        font.getData().setScale(2.5f);
+
+        redStyle = new Label.LabelStyle(font, Color.RED);
+        yellowStyle = new Label.LabelStyle(font, Color.YELLOW);
+        greenStyle = new Label.LabelStyle(font, Color.GREEN);
+        label = new Label(String.format("%.1f", timer), greenStyle);
+        pausedLabel = new Label("PAUSED", greenStyle);
+
+        label.setPosition(900, 1000); // At the top of the screen
+        pausedLabel.setPosition(900, 500); // Displayed at the centre of the screen
+
+        stage.addActor(pausedLabel);
+        stage.addActor(label);
+        pausedLabel.setVisible(false);
+
+        mapRenderer = new OrthogonalTiledMapRenderer(map);
+
+        
 
         
         
@@ -227,6 +267,7 @@ public class GamePlay implements Screen {
         
         // Dean collision
         if (dean.checkCollision(player.getCollision())) {
+            points.deanCaughtYou();
             gameOver(false);
         }
 
@@ -291,7 +332,8 @@ public class GamePlay implements Screen {
     public void gameOver(boolean hasWon) {
         System.out.println("Game Over!");
         if (hasWon) {
-            main.winGame();
+            points.calcPoints(timer);
+            main.winGame(points.getScore());
         }
         else {
             main.endGame();
@@ -300,6 +342,12 @@ public class GamePlay implements Screen {
 
     private void updateTimer(float delta) {
         timer -= delta;
+        if (timer <= 150 && timer >= 60) {
+            label.setStyle(yellowStyle);
+        }
+        if (timer <= 60) {
+            label.setStyle(redStyle);
+        }
         label.setText(String.format("%.1f", timer));
         if (timer <= 0) {
             gameOver(false);

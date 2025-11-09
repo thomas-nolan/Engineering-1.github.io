@@ -14,7 +14,12 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-
+/* Class for the end game screen. 
+ * Once the game is completed, the end game screen displays
+ * a message that varies based on if the player won or not
+ * The final point score is also displayed in this menu
+ * The player can return to the main menu from this screen with a button
+ */
 public class EndGameScreen implements Screen{
     private Stage stage;
     private Skin skin;
@@ -26,7 +31,7 @@ public class EndGameScreen implements Screen{
     private Texture backgroundTexture;
 
 
-
+    // Constructor
     public EndGameScreen(Main game, boolean escaped, int score) {
         this.game = game;
         this.score = score;
@@ -110,7 +115,7 @@ public class EndGameScreen implements Screen{
     @Override
     public void hide() {}
     @Override
-    //Used to clear old stage + skin
+    //Used to clear old stage + skin to free memory
     public void dispose() {
         stage.dispose();
         skin.dispose();
