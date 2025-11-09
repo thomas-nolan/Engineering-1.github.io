@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector2;
  * for the rest of the game
  * It disappears once activated
  */
-public class SpeedBoost {
+public class SpeedBoost extends Event{
     private Texture texture;
     private Sprite boostSprite;
     private Vector2 position;
@@ -24,7 +24,8 @@ public class SpeedBoost {
      * @param xPostion - The item's position on the x-axis
      * @param yPostion - The item's postion on the y-axis
      */
-    public SpeedBoost(Texture texture, float xPosition, float yPosition) {
+    public SpeedBoost(String name, Texture texture, float xPosition, float yPosition) {
+        super(name);
         this.texture = texture;
         this.boostSprite = new Sprite(texture);
         this.position = new Vector2(xPosition, yPosition);
@@ -42,7 +43,7 @@ public class SpeedBoost {
     }
 
     public void draw(SpriteBatch batch) {
-        if (this.active) {
+        if (!isTriggered()) {
             boostSprite.setPosition(position.x, position.y);
             boostSprite.draw(batch);
         }
@@ -56,10 +57,16 @@ public class SpeedBoost {
 
     // Removes item once activated
     public void deactivate() {
-        this.active = false;
+        setTriggered(false);
     }
 
     public boolean getActive() {
-        return this.active;
+        return isTriggered();
+    }
+
+    @Override
+    public void trigger() {
+        setTriggered(true);
+        incrementEventsCounter();
     }
 }

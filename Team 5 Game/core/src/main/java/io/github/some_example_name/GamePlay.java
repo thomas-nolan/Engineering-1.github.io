@@ -67,7 +67,7 @@ public class GamePlay implements Screen {
 
     // Doors
     private List<Door> doors = new ArrayList<>();
-    private Event_TripWire tripWire;
+    private Tripwire tripWire;
     private Key key;
     private boolean hasKey = false;
 
@@ -135,7 +135,7 @@ public class GamePlay implements Screen {
         player = new Player(playerTexture, 775, 100, nonWalkableLayers, walls, corners, 40, 40);
         
         //speedboost
-        speedBoost = new SpeedBoost(speedBoostTexture, 680, 490);
+        speedBoost = new SpeedBoost("SpeedBoost", speedBoostTexture, 680, 490);
 
         //dean
         dean = new Dean(deanTexture, 550f, 480f, nonWalkableLayers, walls, corners, 425f, 425f, 180f, 145f, 50, 50);
@@ -146,11 +146,12 @@ public class GamePlay implements Screen {
         doors.add(door);
         
         //key
-        key = new Key(735, 480, 35, 35, keyTexture);
+        Rectangle keyZone = new Rectangle(735, 480, 35, 35);
+        key = new Key("Keycard", keyZone, keyTexture);
         
         //tripwire
         Rectangle tripWireZone = new Rectangle(378, 500, 32, 32);
-        tripWire = new Event_TripWire("tripwire", tripWireZone, door);
+        tripWire = new Tripwire("tripwire", tripWireZone, door);
         
         
         
@@ -228,11 +229,11 @@ public class GamePlay implements Screen {
     }
 
     public void speedBoost() {
-        if (speedBoost.getActive() && speedBoost.checkCollision(player)) {
+        if (!speedBoost.isTriggered() && speedBoost.checkCollision(player)) {
+            speedBoost.trigger();
             float newSpeed = player.getPlayerSpeed();
             newSpeed *= 2;
             player.setPlayerSpeed(newSpeed);
-            speedBoost.deactivate();
         }
     }
 
@@ -249,8 +250,8 @@ public class GamePlay implements Screen {
         
         
         // Key collection
-        if (!key.isCollected() && key.collides(player.getCollision())) {
-            key.collect();
+        if (!key.isTriggered() && key.collides(player.getCollision())) {
+            key.trigger();
             hasKey = true;
         }
         
@@ -268,6 +269,7 @@ public class GamePlay implements Screen {
         // Dean collision
         if (dean.checkCollision(player.getCollision())) {
             points.deanCaughtYou();
+
             gameOver(false);
         }
 
@@ -293,7 +295,7 @@ public class GamePlay implements Screen {
         player.draw(spriteBatch);
 
         //only draw when the player has not collected yet
-        if (speedBoost.getActive()) {
+        if (!speedBoost.isTriggered()) {
             speedBoost.draw(spriteBatch);
         }
 
@@ -330,6 +332,7 @@ public class GamePlay implements Screen {
     }
 
     public void gameOver(boolean hasWon) {
+        Event.resetEventsCounter();
         System.out.println("Game Over!");
         if (hasWon) {
             points.calcPoints(timer);
