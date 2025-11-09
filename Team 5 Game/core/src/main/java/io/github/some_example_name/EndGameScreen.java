@@ -31,22 +31,32 @@ public class EndGameScreen implements Screen{
     private Texture backgroundTexture;
 
 
-    // Constructor
+    /**
+     * Constructor for the EndGameScreen.
+     *
+     * @param game    the main game instance which is used to switch screens
+     * @param escaped true if the player has escapred, false if they failed
+     * @param score   the player's final score, calculated at the end
+     */
     public EndGameScreen(Main game, boolean escaped, int score) {
         this.game = game;
         this.score = score;
 
+        // Create a new stage and set it as the input processor
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
+        // Loads default UI skin for buttons and labels
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         BitmapFont font = new BitmapFont();
-        //Find a background texture to use and add it to assests
+        // Different screens shown for failure and success
         if (escaped) {
             backgroundTexture = new Texture(Gdx.files.internal("endGameWin1.bmp"));
         } else {
             backgroundTexture = new Texture(Gdx.files.internal("endGameFail1.bmp"));
         }
+
+        // Create and add the background image to the stage
         Image background = new Image(backgroundTexture);
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         background.setPosition(0, 0);
@@ -127,3 +137,4 @@ public class EndGameScreen implements Screen{
     }
 
 }
+
