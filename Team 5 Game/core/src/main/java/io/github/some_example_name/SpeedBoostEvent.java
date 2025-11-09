@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector2;
  * for the rest of the game
  * It disappears once activated
  */
-public class SpeedBoost extends Event{
+public class SpeedBoostEvent extends Event{
     private Texture texture;
     private Sprite boostSprite;
     private Vector2 position;
@@ -24,7 +24,7 @@ public class SpeedBoost extends Event{
      * @param xPostion - The item's position on the x-axis
      * @param yPostion - The item's postion on the y-axis
      */
-    public SpeedBoost(String name, Texture texture, float xPosition, float yPosition) {
+    public SpeedBoostEvent(String name, Texture texture, float xPosition, float yPosition) {
         super(name);
         this.texture = texture;
         this.boostSprite = new Sprite(texture);

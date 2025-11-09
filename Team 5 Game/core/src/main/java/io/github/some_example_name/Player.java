@@ -44,7 +44,7 @@ public class Player {
 
     /* Called by the main class every frame, responsible for player movement and collisions.
     * Player moves using arrow keys or WASD */
-    public void update(List<Door> doors, Tripwire tripWire) {
+    public void update(List<Door> doors, TripwireEvent tripWire) {
         float delta = Gdx.graphics.getDeltaTime();
 
         float moveX = 0;

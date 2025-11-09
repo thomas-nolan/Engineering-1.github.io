@@ -13,7 +13,7 @@ import com.badlogic.gdx.math.Vector2;
  * It unlocks the exit door in the Dean's office.
  * It disappears once activated
  */
-public class Key extends Event {
+public class KeyEvent extends Event {
     private Rectangle keyCollision;
     private Texture texture;
 
@@ -24,7 +24,7 @@ public class Key extends Event {
      * @param height - height of the key
      * @param texture - The texture of the key (keycard)
      */
-    public Key(String name, Rectangle keyZone, Texture texture) {
+    public KeyEvent(String name, Rectangle keyZone, Texture texture) {
         super(name);
         this.keyCollision = keyZone;
         this.texture = texture;

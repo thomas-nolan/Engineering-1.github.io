@@ -40,7 +40,7 @@ public class GamePlay implements Screen {
     SpriteBatch spriteBatch;
     BitmapFont font;
     Player player;
-    SpeedBoost speedBoost;
+    SpeedBoostEvent speedBoost;
 
     //map
     FitViewport viewport;
@@ -68,8 +68,8 @@ public class GamePlay implements Screen {
 
     // Doors
     private List<Door> doors = new ArrayList<>();
-    private Tripwire tripWire;
-    private Key key;
+    private TripwireEvent tripWire;
+    private KeyEvent key;
     private boolean hasKey = false;
 
     // Dean
@@ -136,7 +136,7 @@ public class GamePlay implements Screen {
         player = new Player(playerTexture, 775, 100, nonWalkableLayers, walls, corners, 40, 40);
         
         //speedboost
-        speedBoost = new SpeedBoost("SpeedBoost", speedBoostTexture, 680, 490);
+        speedBoost = new SpeedBoostEvent("SpeedBoost", speedBoostTexture, 680, 490);
 
         //dean
         dean = new Dean(deanTexture, 550f, 480f, nonWalkableLayers, walls, corners, 425f, 425f, 180f, 145f, 50, 50);
@@ -148,11 +148,11 @@ public class GamePlay implements Screen {
         
         //key
         Rectangle keyZone = new Rectangle(1472, 480, 35, 35);
-        key = new Key("Keycard", keyZone, keyTexture);
+        key = new KeyEvent("Keycard", keyZone, keyTexture);
         
         //tripwire
         Rectangle tripWireZone = new Rectangle(378, 500, 32, 32);
-        tripWire = new Tripwire("tripwire", tripWireZone, door);
+        tripWire = new TripwireEvent("tripwire", tripWireZone, door);
         
         finishZone = new Rectangle(0, 864, 32, 128);
         
