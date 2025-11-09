@@ -69,6 +69,7 @@ public class GamePlay implements Screen {
 
     private final Main main;
 
+    //constructor
     public GamePlay(final Main game) {
         this.main = game;
     }
@@ -85,6 +86,9 @@ public class GamePlay implements Screen {
 
         spriteBatch = new SpriteBatch();
 
+        
+        
+        
         // Load textures
         playerTexture = new Texture(Gdx.files.internal("player1.png"));
         speedBoostTexture = new Texture(Gdx.files.internal("speed_boost_sprite.png"));
@@ -94,6 +98,9 @@ public class GamePlay implements Screen {
         deanTexture = new Texture(Gdx.files.internal("dean.png"));
 
         System.out.println("Textures loaded successfully");
+        
+        
+        
 
         // Load map
         map = new TmxMapLoader().load(Gdx.files.internal("maps/ENG.tmx").file().getPath());
@@ -108,47 +115,49 @@ public class GamePlay implements Screen {
 
         walls = (TiledMapTileLayer) map.getLayers().get("Edges");
         corners = (TiledMapTileLayer) map.getLayers().get("Corners");
+        
+        mapRenderer = new OrthogonalTiledMapRenderer(map);
 
+        
+        
         // Initialize game objects
         player = new Player(playerTexture, 775, 100, nonWalkableLayers, walls, corners, 30, 30);
         speedBoost = new SpeedBoost(speedBoostTexture, 300, 100);
 
         //dean
         dean = new Dean(deanTexture, 550f, 480f, nonWalkableLayers, walls, corners, 425f, 425f, 180f, 145f, 50, 50);
-
-        // Set up UI (only game UI, no menu)
-        stage = new Stage(new ScreenViewport());
-
-        skin = new Skin(Gdx.files.internal("uiskin.json"));
-        font = new BitmapFont();
-        font.getData().setScale(2.5f);
-
-        Label.LabelStyle style = new Label.LabelStyle(font, Color.RED);
-        label = new Label(String.format("%.1f", timer), style);
-        pausedLabel = new Label("PAUSED", style);
-
-        label.setPosition(900, 1000); // At the top of the screen
-        pausedLabel.setPosition(900, 500); // Displayed at the centre of the screen
-
-        stage.addActor(pausedLabel);
-        stage.addActor(label);
-        pausedLabel.setVisible(false);
-
-        mapRenderer = new OrthogonalTiledMapRenderer(map);
-
+        
+        //door
         Door door = new Door(485, 580, 52, 52, doorTexture2);
         door.unlock();
         doors.add(door);
         
-        Rectangle tripWireZone = new Rectangle(378, 500, 32, 32);
-        
-        tripWire = new Event_TripWire("tripwire", tripWireZone, door);
-
-        // Set up key
+        //key
         key = new Key(760, 420, 50, 50, keyTexture);
         
-        //debug
-        deanAreaDebug = new Texture(Gdx.files.internal("door.jpg"));
+        //tripwire
+        Rectangle tripWireZone = new Rectangle(378, 500, 32, 32);
+        tripWire = new Event_TripWire("tripwire", tripWireZone, door);
+
+        
+        
+        
+        
+        // Set up UI (only game UI, no menu)
+        stage = new Stage(new ScreenViewport());
+        skin = new Skin(Gdx.files.internal("uiskin.json"));
+        font = new BitmapFont();
+        font.getData().setScale(2.5f);
+        Label.LabelStyle style = new Label.LabelStyle(font, Color.RED);
+        label = new Label(String.format("%.1f", timer), style);
+        pausedLabel = new Label("PAUSED", style);
+        label.setPosition(900, 1000); // At the top of the screen
+        pausedLabel.setPosition(900, 500); // Displayed at the centre of the screen
+        stage.addActor(pausedLabel);
+        stage.addActor(label);
+        pausedLabel.setVisible(false);
+
+        
 
         System.out.println("GamePlay screen loaded successfully");
     }
@@ -192,15 +201,20 @@ public class GamePlay implements Screen {
     }
 
     private void logic() {
+    	//clamp player movement to world
         float worldWidth = viewport.getWorldWidth();
         float worldHeight = viewport.getWorldHeight();
         player.clamp(worldWidth, worldHeight);
 
+        
+        
         // Key collection
         if (!key.isCollected() && key.collides(player.getCollision())) {
             key.collect();
             hasKey = true;
         }
+        
+        
 
         // Unlock doors
         if (hasKey) {
@@ -209,6 +223,8 @@ public class GamePlay implements Screen {
             }
         }
 
+        
+        
         // Dean collision
         if (dean.checkCollision(player.getCollision())) {
             gameOver(false);
@@ -235,15 +251,20 @@ public class GamePlay implements Screen {
 
         player.draw(spriteBatch);
 
+        //only draw when the player has not collected yet
         if (speedBoost.getActive()) {
             speedBoost.draw(spriteBatch);
         }
 
+        //draw list of doors
         for (Door door : doors) {
             door.draw(spriteBatch);
         }
 
+        //draw key
         key.draw(spriteBatch);
+        
+        //draw dean
         dean.draw(spriteBatch);
         
         //debug
