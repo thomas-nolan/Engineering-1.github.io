@@ -65,9 +65,10 @@ libGDX
 Java  
 
 ### Dependencies / Libraries
-- libGDX - the main framework for the game
-- No additional third party libraries were used
-- Assest (finish this up)
+- [libGDX](https://libgdx.com/) - The main framework for the game
+- [Tiled](https://thorbjorn.itch.io/tiled) - .tmx Map editor
+- [Modern Interiors Tileset](https://limezu.itch.io/moderninteriors/devlog/244045/free-version-overview-18042021-update) - Tile set used for interious and walls
+- [RPG Tileset](https://pipoya.itch.io/pipoya-rpg-tileset-32x32) - Tile set used for exteriors
 
 ### Project Structure
 - core/ – Contains all main game code and logic.
