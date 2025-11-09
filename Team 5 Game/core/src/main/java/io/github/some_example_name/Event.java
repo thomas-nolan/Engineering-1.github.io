@@ -1,5 +1,7 @@
 package io.github.some_example_name;
 
+import com.badlogic.gdx.math.Rectangle;
+
 /* This abstract class manages the multiple events that appear in the game
      * 
      * Each event is named and has a location.
@@ -8,18 +10,27 @@ package io.github.some_example_name;
 public abstract class Event {
     private String name;
     private boolean isTriggered;
-    private String location;
-
     
-    public Event(String name, String location) {
+    private static int eventsCounter; 
+    
+    public Event(String name) {
         this.name = name;
-        this.location = location;
         this.isTriggered = false;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
+
+    protected void incrementEventsCounter () {
+        eventsCounter++;
+        System.out.println(eventsCounter);
+    }
+
+    public static void resetEventsCounter () {
+        eventsCounter = 0;
+    }
+
 
     public void setName(String name) {
         this.name = name;
@@ -33,13 +44,6 @@ public abstract class Event {
         this.isTriggered = triggered;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
 
     public abstract void trigger();
 }
