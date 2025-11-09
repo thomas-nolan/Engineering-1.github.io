@@ -77,7 +77,10 @@ Java
 - gradle & config files – For building and project settings.
 
 ## How to run
-(Fill this in later)
+Double click on the JAR file or enter the following commands to run:
+
+Windows and Linux:
+java -jar Team_5_Game.jar
 
 ## Implementation for Assessment 1
 
