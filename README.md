@@ -27,7 +27,7 @@ Gather a key card to unlock the escape route
 Locked doors, enemy dean and a hidden event which you may trigger
 
 ### Rewards
-Bonus points for completing the game quickly and a speed boosting potion
+Bonus points for completing the game quickly 
 
 ### Hidden Events
 A tripwire feature which will lock one of the doors in the maze, triggered by the play 
