@@ -12,7 +12,9 @@ import com.badlogic.gdx.math.Rectangle;
  * It unlocks the exit door in the Dean's office.
  * It disappears once activated
  */
-public class KeyEvent extends Event {
+public class KeyEvent implements Event {
+    private String name;
+    private boolean isTriggered;
     private Rectangle keyCollision;
     private Texture texture;
 
@@ -24,10 +26,10 @@ public class KeyEvent extends Event {
      * @param texture - The texture of the key (keycard)
      */
     public KeyEvent(String name, Rectangle keyZone, Texture texture) {
-        super(name);
+        this.name = name;
         this.keyCollision = keyZone;
         this.texture = texture;
-        setTriggered(false);
+        this.isTriggered = false;
     }
 
 
@@ -50,4 +52,10 @@ public class KeyEvent extends Event {
             incrementEventsCounter();
         }
     }
+    
+    // Interface methods
+    @Override public String getName() { return name; }
+    @Override public void setName(String name) { this.name = name; }
+    @Override public boolean isTriggered() { return isTriggered; }
+    @Override public void setTriggered(boolean triggered) { this.isTriggered = triggered; }
 }
