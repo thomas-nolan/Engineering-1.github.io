@@ -333,6 +333,13 @@ public class GamePlay implements Screen {
         }
     }
 
+    /* Updates timers in the game
+     * Called each frame to reduce the game timer.
+     * Changes the colour of the game timer based on time remaining
+     * Ends game if timer reaches 0
+     * Removes speed boost if active and speed boost timer reaches 0
+     * @param delta - Delta time
+     */
     private void updateTimer(float delta) {
         timer -= delta;
         if (timer <= 150 && timer >= 60) {
@@ -364,6 +371,7 @@ public class GamePlay implements Screen {
         }
     }
 
+    /* Dispose function to remove UI elements from memory */
     @Override
     public void dispose() {
         stage.dispose();

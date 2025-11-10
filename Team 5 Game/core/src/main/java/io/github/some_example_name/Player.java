@@ -13,7 +13,10 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.List;
 
-/* This class implements the player character */
+/* This class implements the player character
+ * It is responsible for the position, movement, speed
+ * and collision detection of the player character.
+ */
 public class Player {
     protected Sprite sprite;
     protected Vector2 position;
@@ -27,7 +30,12 @@ public class Player {
     TiledMapTileLayer corners;
 
     /* Player constructor
-    *  */
+    
+    * @param playerTexture - The visual representation of the player character
+      @param startXpostiton - Starting player position on x-axis
+      @param startYposition - Starting player position on y-axis
+      @param nonWalkableLayers - An array of map layers the player can't move on. 
+    */
     public Player(Texture playerTexture, float startXPosition, float startYPosition,
                   Array<TiledMapTileLayer> nonWalkableLayers, TiledMapTileLayer wallLayer, TiledMapTileLayer cornerLayer, int sizeX, int sizeY) {
         sprite = new Sprite(playerTexture);
@@ -91,7 +99,11 @@ public class Player {
     }
 
     /* This function checks that the position the player is moving to is walkable.
-    * This prevents the player from moving through walls or obstacles. */
+    * This prevents the player from moving through walls or obstacles. 
+      @param xPosition - The x-axis position of the location to be checked
+      @param yPosition - The y-axis position of the location to be checked
+      @return bool - True if walkable, false if not
+    */
     public boolean isWalkable(float xPosition, float yPosition) {
 
         for (TiledMapTileLayer layer : nonWalkable) {
@@ -109,10 +121,18 @@ public class Player {
         return true;
     }
 
+    /* Draws player character on map
+     * @param SpriteBatch - The spritebatch for the game
+     */
     public void draw(SpriteBatch batch) {
         sprite.draw(batch);
     }
 
+    /*
+     * Clamps the player character, stopping them from moving outside map bounds.
+     * @param worldWidth
+     * @param worldHeight 
+     */
     public void clamp(float worldWidth, float worldHeight) {
         float width = sprite.getWidth();
         float height = sprite.getHeight();
@@ -124,6 +144,9 @@ public class Player {
         playerCollision.setPosition(clampX, clampY);
     }
 
+    /* Getter for player collision rectangle
+     * @return Rectangle - Collision bounds
+     */
     public Rectangle getCollision() {
         return playerCollision;
     }
@@ -131,15 +154,23 @@ public class Player {
     public void dispose() {
         // Dispose if needed
     }
-
+    /* Getter for player position
+     * @return Vector2 - Player position
+     */
     public Vector2 getPosition() {
         return this.position;
     }
 
+    /* Getter for player speed
+     * @return float - Player speed
+     */
     public float getPlayerSpeed() {
         return this.playerSpeed;
     }
 
+    /* Setter for player speed
+     * @param float - New value for player speed
+     */
     public void setPlayerSpeed(float newSpeed) {
         this.playerSpeed = newSpeed;
     }
