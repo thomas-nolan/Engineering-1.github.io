@@ -72,7 +72,7 @@ public class SpeedBoostEvent implements Event{
     @Override
     public void trigger() {
         setTriggered(true);
-        incrementEventsCounter();
+        EventCounter.incrementEventsCounter();
     }
 
     // Interface methods
