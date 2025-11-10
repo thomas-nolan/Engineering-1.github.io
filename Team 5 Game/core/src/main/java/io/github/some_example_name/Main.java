@@ -38,11 +38,11 @@ public class Main extends Game {
     // Method to start the game
     public void startGame() {setScreen(new GamePlay(this)); }
 
-    /* Two methods that end the game.
+    /* Two methods responsible for ending the game.
      * endGame(): Called when the player loses the game
      * winGame(): Called when the player wind the game
      * @param escaped - True if the player wins, false if they lose
-     * @param points - The number of points won by the player. 
+     * @param points - The number of points won by the player.
      * Set to 0 if the player loses.
      */
     public void endGame() {setScreen(new EndGameScreen(this, false, 0));}

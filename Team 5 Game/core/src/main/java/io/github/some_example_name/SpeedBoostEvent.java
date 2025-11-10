@@ -25,8 +25,8 @@ public class SpeedBoostEvent implements Event{
     /* Constructor for the SpeedBoost
      * @param texture - The texture for the item (coffee cup)
      * @param name - Event name
-     * @param xPostion - The item's position on the x-axis
-     * @param yPostion - The item's postion on the y-axis
+     * @param xPosition - The item's position on the x-axis
+     * @param yPosition - The item's position on the y-axis
      */
     public SpeedBoostEvent(String name, Texture texture, float xPosition, float yPosition) {
         this.name = name;

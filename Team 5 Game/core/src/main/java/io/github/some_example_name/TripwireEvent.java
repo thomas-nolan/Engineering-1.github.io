@@ -3,7 +3,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 /* A child of the abstract class Event
  * Responsible for the trip wire.
- * 
+ *
  * The trip wire locks the door in the dean's office
  * which requires a key to unlock again.
  */
@@ -13,7 +13,11 @@ public class TripwireEvent implements Event{
     private Rectangle tripWireZone;
     private Door doorToLock;
 
-    /* Constructor */
+    /* Constructor
+    * @param name - Name of the event
+    * @param zone - Position of the event
+    * @param door - The door used by the event
+    * isTriggered set to false by default*/
     public TripwireEvent(String name, Rectangle zone, Door door){
         this.name = name;
         this.tripWireZone = zone;

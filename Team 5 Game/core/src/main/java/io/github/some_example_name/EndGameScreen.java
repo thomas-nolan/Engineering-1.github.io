@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-/* Class for the end game screen. 
+/* Class for the end game screen.
  * Once the game is completed, the end game screen displays
  * a message that varies based on if the player won or not
  * The final point score is also displayed in this menu
@@ -35,7 +35,7 @@ public class EndGameScreen implements Screen{
      * Constructor for the EndGameScreen.
      *
      * @param game    the main game instance which is used to switch screens
-     * @param escaped true if the player has escapred, false if they failed
+     * @param escaped true if the player has escaped, false if they failed
      * @param score   the player's final score, calculated at the end
      */
     public EndGameScreen(Main game, boolean escaped, int score) {
@@ -137,4 +137,3 @@ public class EndGameScreen implements Screen{
     }
 
 }
-

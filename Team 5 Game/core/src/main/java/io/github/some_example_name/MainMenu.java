@@ -55,7 +55,7 @@ public class MainMenu implements Screen {
         tutorialExitButtonTexture =  new Texture(Gdx.files.internal("CloseButton.png"));
     }
 
-    //Hover so i changed it so that it would make
+    //Hover so I changed it so that it would make
     private TextButton.TextButtonStyle IsMousOverTexture(Texture isMouseNotOverTexture, Texture isMouseOverTexture) {
         TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
         buttonStyle.up = new TextureRegionDrawable(isMouseNotOverTexture);
@@ -78,7 +78,7 @@ public class MainMenu implements Screen {
         setupMainMenuButtons();
     }
 
-    //Seting up the buttons
+    //Setting up the buttons
     private void setupMainMenuButtons() {
         TextButton startButton = createMainMenuButton(startButtonTexture, hoverStartButtonTexture, 0);
         TextButton tutorialButton = createMainMenuButton(tutorialButtonTexture, hoverTutorialButtonTexture, 1);

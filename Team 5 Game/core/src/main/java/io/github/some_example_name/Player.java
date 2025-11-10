@@ -30,11 +30,11 @@ public class Player {
     TiledMapTileLayer corners;
 
     /* Player constructor
-    
+
     * @param playerTexture - The visual representation of the player character
-      @param startXpostiton - Starting player position on x-axis
+      @param startXposition - Starting player position on x-axis
       @param startYposition - Starting player position on y-axis
-      @param nonWalkableLayers - An array of map layers the player can't move on. 
+      @param nonWalkableLayers - An array of map layers the player can't move on.
     */
     public Player(Texture playerTexture, float startXPosition, float startYPosition,
                   Array<TiledMapTileLayer> nonWalkableLayers, TiledMapTileLayer wallLayer, TiledMapTileLayer cornerLayer, int sizeX, int sizeY) {
@@ -99,7 +99,7 @@ public class Player {
     }
 
     /* This function checks that the position the player is moving to is walkable.
-    * This prevents the player from moving through walls or obstacles. 
+    * This prevents the player from moving through walls or obstacles.
       @param xPosition - The x-axis position of the location to be checked
       @param yPosition - The y-axis position of the location to be checked
       @return bool - True if walkable, false if not
@@ -131,7 +131,7 @@ public class Player {
     /*
      * Clamps the player character, stopping them from moving outside map bounds.
      * @param worldWidth
-     * @param worldHeight 
+     * @param worldHeight
      */
     public void clamp(float worldWidth, float worldHeight) {
         float width = sprite.getWidth();

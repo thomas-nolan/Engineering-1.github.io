@@ -33,7 +33,7 @@ public class KeyEvent implements Event {
     }
 
 
-    // Checks for player collsion
+    // Checks for player collision
     public boolean collides(Rectangle playerCollision) {
         return keyCollision.overlaps(playerCollision);
     }
@@ -52,7 +52,7 @@ public class KeyEvent implements Event {
             EventCounter.incrementEventsCounter();
         }
     }
-    
+
     // Interface methods
     @Override public String getName() { return name; }
     @Override public void setName(String name) { this.name = name; }
