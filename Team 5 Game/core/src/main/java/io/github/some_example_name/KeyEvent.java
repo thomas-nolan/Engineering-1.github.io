@@ -49,7 +49,7 @@ public class KeyEvent implements Event {
     public void trigger() {
         if (!isTriggered()) {
             setTriggered(true);
-            incrementEventsCounter();
+            EventCounter.incrementEventsCounter();
         }
     }
     
