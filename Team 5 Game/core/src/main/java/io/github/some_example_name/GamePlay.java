@@ -2,6 +2,9 @@ package io.github.some_example_name;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.w3c.dom.events.EventException;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -322,7 +325,7 @@ public class GamePlay implements Screen {
     * @param hasWon - If true, the good ending screen is shown.
     * The bad ending screen is shown if false.*/
     public void gameOver(boolean hasWon) {
-        Event.resetEventsCounter();
+        EventCounter.resetEventsCounter();
         System.out.println("Game Over!");
         if (hasWon) {
             points.calcPoints(timer);
