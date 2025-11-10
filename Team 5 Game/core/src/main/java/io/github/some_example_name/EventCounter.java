@@ -1,9 +1,9 @@
 package io.github.some_example_name;
 
 /**
- * Utility class for tracking triggered events in the game.
+ * Class that is used for tracking the number of triggered events in the game.
  */
-public class EventTracker {
+public class EventCounter {
     private static int eventsCounter = 0;
 
     public static void incrementEventsCounter() {
