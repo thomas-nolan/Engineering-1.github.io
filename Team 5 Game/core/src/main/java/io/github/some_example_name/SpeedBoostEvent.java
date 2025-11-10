@@ -13,7 +13,9 @@ import com.badlogic.gdx.math.Vector2;
  * It disappears once activated
  *
  */
-public class SpeedBoostEvent extends Event{
+public class SpeedBoostEvent implements Event{
+    private String name;
+    private boolean isTriggered;
     private Texture texture;
     private Sprite boostSprite;
     private Vector2 position;
@@ -27,7 +29,8 @@ public class SpeedBoostEvent extends Event{
      * @param yPostion - The item's postion on the y-axis
      */
     public SpeedBoostEvent(String name, Texture texture, float xPosition, float yPosition) {
-        super(name);
+        this.name = name;
+        this.isTriggered = false;
         this.texture = texture;
         this.boostSprite = new Sprite(texture);
         this.position = new Vector2(xPosition, yPosition);
@@ -45,7 +48,7 @@ public class SpeedBoostEvent extends Event{
     }
 
     public void draw(SpriteBatch batch) {
-        if (!isTriggered()) {
+        if (!isTriggered) {
             boostSprite.setPosition(position.x, position.y);
             boostSprite.draw(batch);
         }
@@ -63,7 +66,7 @@ public class SpeedBoostEvent extends Event{
     }
 
     public boolean getActive() {
-        return isTriggered();
+        return isTriggered;
     }
 
     @Override
@@ -71,4 +74,10 @@ public class SpeedBoostEvent extends Event{
         setTriggered(true);
         incrementEventsCounter();
     }
+
+    // Interface methods
+    @Override public String getName() { return name; }
+    @Override public void setName(String name) { this.name = name; }
+    @Override public boolean isTriggered() { return isTriggered; }
+    @Override public void setTriggered(boolean triggered) { this.isTriggered = triggered; }
 }
