@@ -11,17 +11,17 @@ In addition we have also provided the game files for you to play.
 
 ## Project documents
 
-- Requirements document (enter file here)
-- Architecture document (enter file here)
+- [Requirements document](Requirements.pdf)
+- [Architecture document](Architecture.pdf)
 - [Method selection and planning document](Method_selection_and_planning.pdf)
-- Risk assessment and mitigation document (enter file here)
-- Implementation document (enter file here)
+- [Risk assessment and mitigation document](Risk_Assesment_and_Mitigation.pdf)
+- [Implementation document](Licensing.pdf)
 
 ## Executable code 
 - Download game.jar (enter file here)
 
 ## Source files for the game
-- Github repository (enter link here)
+- [Github repository](https://github.com/thomas-nolan/Engineering-1.github.io)
 
 --------------------------------------------------------
 ## Project Plan Evolution 
