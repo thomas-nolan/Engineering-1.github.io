@@ -18,7 +18,7 @@ In addition we have also provided the game files for you to play.
 - [Implementation document](Licensing.pdf)
 
 ## Executable code 
-- [Download Team_5_Game.jar](../Team_5_Game.jar)
+- [Download Team_5_Game.jar](https://github.com/thomas-nolan/Engineering-1.github.io/raw/main/Team_5_Game.jar)
 
 ## Source files for the game
 - [Github repository](https://github.com/thomas-nolan/Engineering-1.github.io)
