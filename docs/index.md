@@ -13,7 +13,7 @@ In addition we have also provided the game files for you to play.
 
 - [Requirements document](Requirements.pdf)
 - [Architecture document](Architecture.pdf)
-- [Method selection and planning document](Method_selection_and_planning.pdf)
+- [Method selection and planning document](Method_selection_and_planning_.pdf)
 - [Risk assessment and mitigation document](Risk_Assesment_and_Mitigation.pdf)
 - [Implementation document](Licensing.pdf)
 
